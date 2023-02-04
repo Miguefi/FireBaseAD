@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ancho_cajas_texto">250dp</dimen>
+    <dimen name="alto_cajas_texto">50dp</dimen>
+    <dimen name="alto_boton">60dp</dimen>
+</resources>
