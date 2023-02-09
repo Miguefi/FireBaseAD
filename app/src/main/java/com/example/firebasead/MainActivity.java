@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.firebasead.database.eventosDatabase.Gestor;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +17,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity {
 
     Button gestor, clientes, archivos, eventos;
-    Map<String, Object> gestorObject = new HashMap<>();
+    Gestor gestorObject = new Gestor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +28,11 @@ public class MainActivity extends AppCompatActivity {
         archivos = findViewById(R.id.archivos);
         eventos = findViewById(R.id.eventos);
 
-
         Bundle bundle = this.getIntent().getExtras();
 
         // Gestor : Inicia Sesion
         if(bundle != null) {
-            gestorObject = (Map<String, Object>) bundle.getSerializable("HashMap");
+            gestorObject = (Gestor) bundle.getSerializable("Gestor");
             Toast.makeText(getApplicationContext(), "Sesión iniciada "+gestorObject.toString(), Toast.LENGTH_LONG).show();
         }
 

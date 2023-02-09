@@ -71,7 +71,7 @@ public class Login extends AppCompatActivity {
 
                             Gestor gestorObjeto = new Gestor(document.get("DNI").toString(), document.get("Contraseña").toString(), document.get("Nombre").toString(), document.get("Apellido").toString(), document.get("Num_Telf").toString());
 
-                            Intent intent = new Intent(getApplicationContext(), GestorMain.class);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("Gestor", (Serializable) gestorObjeto);
                             intent.putExtras(bundle);
