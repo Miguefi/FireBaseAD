@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="spinner_style">
+        <item name="android:background">@drawable/borde_spinner</item>
+    </style>
+
+    <style name="SpinnerTheme" parent="android:Widget.Material.Spinner.Underlined">
+        <item name="android:background">@drawable/spinnerbg
+        </item>
+        <item name="android:popupBackground">@drawable/spinnerbg
+        </item>
+        <item name="android:radius">10dp</item>
+        <item name="android:textAlignment">textStart</item>
+    </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
+
+    <style name="DayView">
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/day_text_size</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="MetaView" parent="DayView">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/meta_text_size</item>
+    </style>
+
+    <style name="WeekNumberStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">top|center_horizontal</item>
+        <item name="android:textSize">@dimen/day_monthly_text_size</item>
+        <item name="android:textColor">@color/default_text_color</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="ArrowStyle">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="MonthStyle">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="DatePickerLightStyle">
+        <item name="android:textColorPrimary">@color/cobalt_blue</item>
+    </style>
+
+    <style name="DatePickerDarkStyle">
+        <item name="android:textColorPrimary">@color/oxford_blue</item>
+    </style>
+    <style name="AppTheme.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:outlineProvider">none</item>
+    </style>
+    <style name="AppTheme.ActionBar.TitleTextStyle">
+        <item name="android:textSize">@dimen/actionbar_text_size</item>
+    </style>
+
+    <style name="ColoredButtonStyle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">@dimen/bigger_text_size</item>
+        <item name="android:paddingStart">@dimen/big_margin</item>
+        <item name="android:paddingEnd">@dimen/big_margin</item>
+        <item name="android:paddingTop">@dimen/normal_margin</item>
+        <item name="android:paddingBottom">@dimen/normal_margin</item>
+        <item name="android:background">@drawable/zround_background</item>
+        <item name="android:gravity">center_horizontal</item>
+    </style>
+
+    <style name="hoy">
+        <item name="android:gravity">center</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>

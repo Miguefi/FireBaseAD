@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sociedades">
+        <item>Tipo de Sociedad</item>
+        <item>Sociedad Limitada</item>
+        <item>Autónomo</item>
+        <item>Sociedad Anónima</item>
+        <item>Sociedad Civil</item>
+        <item>Cooperativa</item>
+    </string-array>
+</resources>

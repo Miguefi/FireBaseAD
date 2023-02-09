@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/IntefazCliente"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:orientation="vertical"
+    android:textAlignment="center">
+
+    <LinearLayout
+        android:id="@+id/Cabezera"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alto_boton"
+        android:background="@color/earlie_black"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
+
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/dots" />
+
+        <SearchView
+            android:id="@+id/buscador"
+            android:layout_width="236dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/borde_encabezado"
+            android:searchIcon="@drawable/ic_search">
+
+        </SearchView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:id="@+id/imagenCajaCliente"
+            android:layout_width="33dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/pexels_polina_kovaleva_5927743"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SeccionEventos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tituloProxEv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Proximos Eventos"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <ScrollView
+            android:id="@+id/proximosEventos"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/eventosYarchivosMain"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerEventos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/SeccionDocumentos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tituloRecientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/recientes"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+        <ScrollView
+            android:id="@+id/docsRecientes"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/eventosYarchivosMain"
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerDocumentos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/Menus"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alto_cajas_texto"
+        android:layout_gravity="bottom"
+        android:background="@color/early_black"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:backgroundTint="#00000000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/home" />
+
+        <ImageButton
+            android:id="@+id/files"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#00000000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/folder" />
+
+        <ImageButton
+            android:id="@+id/calendar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:backgroundTint="#00000000"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/calendario" />
+
+    </LinearLayout>
+
+</LinearLayout>

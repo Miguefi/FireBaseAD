@@ -58,7 +58,7 @@ public class NuevoGestor extends AppCompatActivity {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), GestorMain.class);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("HashMap", (Serializable) gestor);
                         intent.putExtras(bundle);
