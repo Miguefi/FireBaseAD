@@ -4,15 +4,66 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@drawable/gradient"
+    tools:context=".MainActivity"
+    android:padding="40dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+
+        <Button
+            android:id="@+id/gestor"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="#00000000"
+            android:text="Gestionar Cuenta Gestor"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2.5dp"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/clientes"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="#00000000"
+            android:text="Gestionar Clientes"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2.5dp"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:id="@+id/archivos"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="#00000000"
+            android:text="Gestionar Archivos"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2.5dp"
+            android:layout_marginTop="20dp"/>
+
+        <Button
+            android:id="@+id/eventos"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:backgroundTint="#00000000"
+            android:text="Gestionar Eventos"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:strokeColor="@color/white"
+            app:strokeWidth="2.5dp"
+            android:layout_marginTop="20dp"/>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
