@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.seradmin.R;
+import com.example.firebasead.R;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class EventActivity extends AppCompatActivity {

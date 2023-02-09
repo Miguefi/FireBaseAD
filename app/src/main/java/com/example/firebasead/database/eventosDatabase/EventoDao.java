@@ -1,7 +1,7 @@
 package com.example.firebasead.database.eventosDatabase;
 
-import com.example.seradmin.database.FirebaseDao;
-import com.example.seradmin.database.Listeners.RetrievalEventListener;
+import com.example.firebasead.database.FirebaseDao;
+import com.example.firebasead.database.Listeners.RetrievalEventListener;
 import com.google.firebase.database.DataSnapshot;
 
 import java.sql.Timestamp;

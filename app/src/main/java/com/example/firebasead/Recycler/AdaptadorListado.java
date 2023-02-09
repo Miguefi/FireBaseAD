@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.seradmin.R;
+import com.example.firebasead.R;
 
 import java.util.ArrayList;
 

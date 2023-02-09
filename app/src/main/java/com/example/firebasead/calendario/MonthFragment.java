@@ -16,7 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.seradmin.R;
+import com.example.firebasead.R;
 
 import org.joda.time.DateTime;
 

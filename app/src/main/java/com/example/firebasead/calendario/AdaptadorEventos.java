@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.seradmin.database.eventosDatabase.Evento;
+import com.example.firebasead.database.eventosDatabase.Evento;
 
 import java.util.List;
 
