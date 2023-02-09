@@ -32,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         // Gestor : Inicia Sesion
         if(bundle != null) {
             gestorObject = (Map<String, Object>) bundle.getSerializable("HashMap");
-            Toast toast = Toast.makeText(getApplicationContext(), "Sesión iniciada "+gestorObject.toString(), Toast.LENGTH_LONG);
-            toast.show();
+            Toast.makeText(getApplicationContext(), "Sesión iniciada "+gestorObject.toString(), Toast.LENGTH_LONG).show();
         }
 
         gestor.setOnClickListener(new View.OnClickListener() {

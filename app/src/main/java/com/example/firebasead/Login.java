@@ -1,22 +1,38 @@
 package com.example.firebasead;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Login extends AppCompatActivity {
+import com.example.firebasead.database.eventosDatabase.Gestor;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
-    private static final int CLAVE_GESTOR = 55;
-    private static final int CLAVE_CLIENTE = 56;
-    private static final int CLAVE_OLVIDADO = 57;
-    private static final int CLAVE_CREAR_CUENTA = 58;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class Login extends AppCompatActivity {
 
     ImageView logo;
     Button login;
@@ -28,16 +44,7 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-//        FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-//        logo = findViewById(R.id.logo);
-//        logo.setOnClickListener(v -> {
-//            //Registra evento de click en foto (no funciona)
-//            Bundle bundle = new Bundle();
-//            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, logo.getContentDescription().toString());
-//            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-//            Toast.makeText(getApplicationContext(), "CLICK", Toast.LENGTH_LONG).show();
-//        });
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         login = findViewById(R.id.sms);
         usuario = findViewById(R.id.user);
@@ -45,75 +52,49 @@ public class Login extends AppCompatActivity {
         usuario = findViewById(R.id.user);
         crearCuenta = findViewById(R.id.createAccount);
         olvidar = findViewById(R.id.forget);
-
-
         logo = findViewById(R.id.logo);
 
-        ActivityResultLauncher controladorLogin = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    //Log.d(TAG, "Vuelve cancelado");
-                    int code = result.getResultCode();
-                    /*switch (code) {
-                        case RESULT_CANCELED:
-                            break;
-                        case CLAVE_INGRESAR:
-                            Log.d(TAG, "NUEVO INGRESO");
-                            PerfilesImagen nuevoPerfil = (PerfilesImagen) result.getData().getSerializableExtra(mensaje);
-                            completo.add(nuevoPerfil);
-                            contactoDao.insert(nuevoPerfil);
-                            AdaptadorListado = new AdaptadorListado(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                        case CLAVE_VOLVER:
-                            AdaptadorListado = new AdaptadorListado(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                        case CLAVE_ELIMINAR:
-                            Log.d(TAG, "NUEVO ELIMINADO");
-                            //Intent elim = result.getData();
-                            String nom = result.getData().getStringExtra(mensaje2);
-                            Log.d(TAG, nom);
-                            PerfilesImagen elimPerfil = contactoDao.findByName(nom);
-                            Log.d(TAG, elimPerfil.getNombre());
-                            completo.remove(elimPerfil);
-                            contactoDao.delete(elimPerfil);
-                            AdaptadorListado = new AdaptadorImagen(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                    }*/
-
-                });
-
+        //LOG IN
         login.setOnClickListener(v -> {
-            //Registra evento de click en foto (no funciona)
-//            Bundle bundle = new Bundle();
-//            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, login.getContentDescription().toString());
-//            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-//            Toast.makeText(getApplicationContext(), "CLICK", Toast.LENGTH_LONG).show();
-            if (usuario.getText().toString().startsWith("G")) {
-                Intent intent = new Intent(Login.this, GestorMain.class);
-                intent.putExtra("GESTOR", CLAVE_GESTOR);
-                controladorLogin.launch(intent);
-            } else if (usuario.getText().toString().startsWith("C")) {
-                Intent intent = new Intent(Login.this, GestorMain.class);
-                intent.putExtra("CLIENTE", CLAVE_CLIENTE);
-                controladorLogin.launch(intent);
-            }
+            String user = usuario.getText().toString();
+            String pass = contraseña.getText().toString();
+
+            CollectionReference gestores = db.collection("Gestores");
+            Query gestor = gestores.whereEqualTo("DNI", user).whereEqualTo("Contraseña", pass);
+
+            gestor.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+
+                            Gestor gestorObjeto = new Gestor(document.get("DNI").toString(), document.get("Contraseña").toString(), document.get("Nombre").toString(), document.get("Apellido").toString(), document.get("Num_Telf").toString());
+
+                            Intent intent = new Intent(getApplicationContext(), GestorMain.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("Gestor", (Serializable) gestorObjeto);
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
+                    }
+                }
+            });
         });
 
+
+        // RECUPERA CONTRASEÑA
         olvidar.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, Recovery.class);
-            intent.putExtra("OLVIDADO", CLAVE_OLVIDADO);
-            controladorLogin.launch(intent);
+            startActivity(intent);
         });
 
+        //CREAR CUENTA
         crearCuenta.setOnClickListener(v -> {
             Intent intent = new Intent(Login.this, NuevoGestor.class);
-            intent.putExtra("OLVIDADO", CLAVE_CREAR_CUENTA);
-            controladorLogin.launch(intent);
+            startActivity(intent);
         });
 
     }
