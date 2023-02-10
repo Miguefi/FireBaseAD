@@ -8,15 +8,6 @@
     android:background="@drawable/gradient"
     tools:context=".calendario.EventActivity">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/event_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/menu_event"
-            app:title="Nuevo Evento"
-            app:titleTextColor="@color/white"
-            android:backgroundTint="@color/oxford_blue" />
-
         <androidx.core.widget.NestedScrollView
             android:id="@+id/event_nested_scrollview"
             android:layout_width="match_parent"
