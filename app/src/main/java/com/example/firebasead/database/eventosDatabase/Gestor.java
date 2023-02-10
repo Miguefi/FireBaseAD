@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Gestor implements Serializable {
     private String Apellido;
+
     private String Contraseña;
     private String DNI;
     private String Nombre;
@@ -60,4 +61,16 @@ public class Gestor implements Serializable {
     public void setNum_Telf(String num_telf) {
         Num_Telf = num_telf;
     }
+
+    @Override
+    public String toString() {
+        return "Gestor{" +
+                "Apellido='" + Apellido + '\'' +
+                ", Contraseña='" + Contraseña + '\'' +
+                ", DNI='" + DNI + '\'' +
+                ", Nombre='" + Nombre + '\'' +
+                ", Num_Telf='" + Num_Telf + '\'' +
+                '}';
+    }
+
 }
