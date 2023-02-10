@@ -36,8 +36,6 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Archivos archivos = listaArchivos.get(position);
         holder.nombre.setText(archivos.getNombre());
-        /*holder.id.setText(archivos.getId());
-        holder.propietario.setText(archivos.getPropietario());*/
     }
 
     @Override
@@ -63,9 +61,6 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
             super(v);
             v.setOnClickListener(this);
             nombre = (TextView) v.findViewById(R.id.idNombreArchivo1);
-            /*id = (TextView) v.findViewById(R.id.idArchivo);
-            propietario = (TextView) v.findViewById(R.id.idPropietario);*/
-
             v.setOnClickListener(this);
         }
 

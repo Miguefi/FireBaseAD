@@ -100,8 +100,6 @@ public class EventoDetalle extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 DocumentReference ref = null;
                                 for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
-
                                     ref = document.getReference();
                                 }
 

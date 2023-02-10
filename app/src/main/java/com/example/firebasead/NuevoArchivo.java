@@ -62,7 +62,6 @@ public class NuevoArchivo extends AppCompatActivity {
                     archivo.setExtension(document.get("Extencion").toString());
                     listaPerfiles.add(archivo);
                 }
-
                 adapter = new AdaptadorListado(listaPerfiles);
                 recyclerView.setAdapter(adapter);
             }

@@ -19,8 +19,8 @@ import java.util.Map;
 
 public class AgregarArchivo extends AppCompatActivity {
 
-    TextView nombre, propietario, dniPropietario, fechaFin, extension;
-    Button agregar;
+    private TextView nombre, propietario, dniPropietario, fechaFin, extension;
+    private Button agregar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
