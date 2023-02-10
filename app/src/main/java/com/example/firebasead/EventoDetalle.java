@@ -6,6 +6,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -13,17 +14,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.firebasead.database.eventosDatabase.Evento;
+import com.example.firebasead.database.eventosDatabase.Gestor;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 public class EventoDetalle extends AppCompatActivity {
 
@@ -118,6 +124,46 @@ public class EventoDetalle extends AppCompatActivity {
                             }
                         }
                     });
+        });
+
+        modificarEvento.setOnClickListener((v) -> {
+            db.collection("Eventos").whereEqualTo("__name__", evento.getId()).limit(1).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentReference docRef = null;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Log.d(TAG, document.getId() + " => " + document.getData());
+
+                        // UPDATE
+                        DocumentReference ref = document.getReference();
+//                        ref.update("Nombre", nom);
+//                        ref.update("Apellido", ape);
+//                        ref.update("Contraseña", con);
+//                        ref.update("Num_Telf", tel);
+
+                        docRef = ref;
+
+                    }
+
+                    //Gestor gestorObjeto = new Gestor(s_dni, con, nom, ape, tel);
+
+                    Map<String, Object> updates = new HashMap<>();
+                    updates.put("timestamp", FieldValue.serverTimestamp());
+
+                    // ESPERAR A UNA RESPUESTA DEL SERVIDOR, ACTUALIZACIONES COMPLETADAS
+                    assert docRef != null;
+                    docRef.update(updates).addOnCompleteListener(task1 -> {
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        Bundle bundle1 = new Bundle();
+                        //bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
+                        intent.putExtras(bundle1);
+                        startActivity(intent);
+                    });
+
+                } else {
+                    Log.w(TAG, "Error select documento.", task.getException());
+                }
+            });
+
         });
     }
 }

@@ -15,9 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firebasead.calendario.AdaptadorEventos;
-import com.example.firebasead.database.Listeners.RetrievalEventListener;
 import com.example.firebasead.database.eventosDatabase.Evento;
-import com.example.firebasead.database.eventosDatabase.EventoDao;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -33,7 +31,6 @@ import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class EventoMain extends AppCompatActivity {
 
@@ -80,17 +77,17 @@ public class EventoMain extends AppCompatActivity {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
                                 DocumentReference ref = document.getReference();
                                 Evento evento = new Evento();
                                 Timestamp timestamp = (Timestamp) document.get("Inicio");
                                 evento.setId(document.getId());
                                 evento.setTitulo(document.get("Titulo").toString());
-                                evento.setInicio(simpleDateFormat.format(timestamp.toDate()));
+                                evento.setFechaInicio(simpleDateFormat.format(timestamp.toDate()));
                                 eventos.add(evento);
-                                Log.d(TAG, evento.getTitulo()+" " +evento.getInicio()+" "+evento.getId());
+                                //Log.d(TAG, evento.getTitulo()+" " +evento.getFechaInicio()+" "+evento.getId());
                             }
-                            Log.d(TAG,eventos.get(0).getTitulo()+ " " + eventos.get(0).getInicio());
+                            //Log.d(TAG,eventos.get(0).getTitulo()+ " " + eventos.get(0).getInicio());
                             aE = new AdaptadorEventos(eventos);
                             RVEventos.setAdapter(aE);
                             aE.setClickListener(new AdaptadorEventos.ItemClickListener() {
@@ -108,7 +105,6 @@ public class EventoMain extends AppCompatActivity {
                         }
                     }
                 });
-        Log.d(TAG, aE.getItemCount()+" items");
         //aL = new AdaptadorListado(perfiles);
 
 

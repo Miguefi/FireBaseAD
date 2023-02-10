@@ -42,7 +42,7 @@
         <meta-data
             android:name="android.app.lib_name"
             android:value="" />
-        </activity>
+        </activity>-->
         <activity
             android:name=".EventoDetalle"
             android:exported="false">
@@ -50,7 +50,7 @@
                 android:name="android.app.lib_name"
                 android:value="" />
 
-        </activity>-->
+        </activity>
         <activity
             android:name=".EditarGestor"
             android:exported="false">

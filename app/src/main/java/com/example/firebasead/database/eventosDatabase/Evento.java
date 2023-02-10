@@ -1,7 +1,6 @@
 package com.example.firebasead.database.eventosDatabase;
 
 import com.google.firebase.database.Exclude;
-import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
 //import java.sql.Timestamp;
@@ -13,8 +12,10 @@ public class Evento implements Serializable {
     public String id;
 
     public String titulo;
-    public String inicio;
-    public String fin;
+    public String fechaInicio;
+    public String horaInicio;
+    public String fechaFin;
+    public String horaFin;
     public float latitud;
     public float longitud;
     public String descripcion;
@@ -24,8 +25,8 @@ public class Evento implements Serializable {
 
     public Evento(String titulo, String inicio, String fin, float latitud, float longitud, String descripcion){
         titulo = this.titulo;
-        inicio = this.inicio;
-        fin = this.fin;
+        inicio = this.fechaInicio;
+        fin = this.fechaFin;
         latitud = this.latitud;
         longitud = this.longitud;
         descripcion = this.descripcion;
@@ -39,20 +40,36 @@ public class Evento implements Serializable {
         this.id = id;
     }
 
-    public String getInicio() {
-        return inicio;
+    public String getFechaInicio() {
+        return fechaInicio;
     }
 
-    public void setInicio(String inicio) {
-        this.inicio = inicio;
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
     }
 
-    public String getFin() {
-        return fin;
+    public String getHoraInicio() {
+        return horaInicio;
     }
 
-    public void setFin(String fin) {
-        this.fin = fin;
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public String getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(String horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
     }
 
     public float getLatitud() {

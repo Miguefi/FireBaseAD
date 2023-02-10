@@ -8,8 +8,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firebasead.R;
-import com.example.firebasead.Recycler.AdaptadorListado;
-import com.example.firebasead.Recycler.PerfilesClientes;
 import com.example.firebasead.database.eventosDatabase.Evento;
 
 import java.util.ArrayList;
@@ -78,7 +76,7 @@ public class AdaptadorEventos extends RecyclerView.Adapter<AdaptadorEventos.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.getTituloEvento().setText(eventosList.get(position).getTitulo());
-        holder.getFechaEvento().setText(eventosList.get(position).getInicio().toString());
+        holder.getFechaEvento().setText(eventosList.get(position).getFechaInicio().toString());
     }
 
     @Override
