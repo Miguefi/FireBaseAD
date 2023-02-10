@@ -48,7 +48,7 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/RVClientes"
+            android:id="@+id/RVEventos"
             android:layout_width="match_parent"
             android:layout_height="590dp"
             android:paddingTop="5dp" />
