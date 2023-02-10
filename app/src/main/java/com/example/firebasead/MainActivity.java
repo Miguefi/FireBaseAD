@@ -60,15 +60,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        gestor.setOnClickListener(new View.OnClickListener() {
+        archivos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), GestorMain.class);
+                Intent intent = new Intent(getApplicationContext(), NuevoArchivo.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("HashMap", (Serializable) gestorObject);
                 intent.putExtras(bundle);
                 startActivity(intent);
-
             }
         });
 
