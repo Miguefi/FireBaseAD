@@ -1,49 +1,29 @@
 package com.example.firebasead.Recycler;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class PerfilesClientes {
+public class PerfilesClientes implements Serializable {
 
     public String nombre;
-    public String apellidos;
-    public String sexo;
-    public String sociedad;
-    public Date nac;
-    public int imagen;
+    public String apellido;
+    public String contraseña;
+    public String dni_cliente;
+    public String dni_gestor;
+    public String tel;
+    public String imagen;
 
+    public PerfilesClientes() {}
 
-    public PerfilesClientes(){}
-    public PerfilesClientes(String nombre, String apellidos,String sexo, String sociedad) {
+    public PerfilesClientes(String nombre, String apellido, String contraseña, String dni_cliente, String dni_gestor, String tel,String imagen) {
         this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.sexo = sexo;
-        this.sociedad=sociedad;
-    }
-
-    public PerfilesClientes(String nombre, String apellidos, Date nac, String sexo, String sociedad) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.nac = nac;
-        this.sexo = sexo;
-        this.sociedad=sociedad;
-    }
-
-    public PerfilesClientes(String nombre, String apellidos, Date nac, String sexo, String sociedad, int imagen) {
-        this.nombre = nombre;
-        this.apellidos = apellidos;
-        this.nac = nac;
-        this.sexo = sexo;
-        this.sociedad=sociedad;
-        this.imagen = imagen;
-    }
-
-    public int getImagen() {
-        return imagen;
-    }
-
-    public void setImagenes(int imagen) {
-        this.imagen = imagen;
+        this.apellido = apellido;
+        this.contraseña = contraseña;
+        this.dni_cliente = dni_cliente;
+        this.dni_gestor = dni_gestor;
+        this.tel = tel;
+        this.imagen=imagen;
     }
 
     public String getNombre() {
@@ -54,59 +34,51 @@ public class PerfilesClientes {
         this.nombre = nombre;
     }
 
-    public String getApellidos() {
-        return apellidos;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setApellidos(String nombre) {
-        this.apellidos = apellidos;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
-    public Date getNac() {
-        return nac;
+    public String getContraseña() {
+        return contraseña;
     }
 
-    public void setEdad(Date nac) {
-        this.nac = nac;
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
-    public String getSexo() {
-        return sexo;
+    public String getDni_cliente() {
+        return dni_cliente;
     }
 
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
+    public void setDni_cliente(String dni_cliente) {
+        this.dni_cliente = dni_cliente;
     }
 
-    public String getSociedad() {return sociedad; }
-
-    public void setSociedad(String sociedad) {this.sociedad = sociedad; }
-
-    public String getLetra() {
-        String letra= String.valueOf(getNombre().charAt(0));
-        return letra;
-    };
-
-
-    /*public ArrayList<PerfilesClientes> generarPerfiles(int n) {
-        ArrayList<PerfilesClientes> perfiles = new ArrayList<>();
-        Date fecha = new Date("1994-03-21");
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-        for (int i = 0; i < n; i++) {
-            perfiles.add( new PerfilesClientes("Nombre " + (i + 1), "Apellido " + (i + 1), fecha,
-                    "masculino", "autonomo"));
-        }
-        return perfiles;
-    }*/
-    public ArrayList<PerfilesClientes> generarPerfiles(int n) {
-        ArrayList<PerfilesClientes> perfiles = new ArrayList<>();
-        //Calendar calendar = Calendar.getInstance();
-        //calendar.set(1994, Calendar.MARCH, 21);
-        //Date fecha = calendar.getTime();
-        for (int i = 0; i < n; i++) {
-            perfiles.add(new PerfilesClientes("Nombre " + (i + 1), "Apellido " + (i + 1), "masculino", "autonomo"));
-        }
-        return perfiles;
+    public String getDni_gestor() {
+        return dni_gestor;
     }
 
+    public void setDni_gestor(String dni_gestor) {
+        this.dni_gestor = dni_gestor;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
 }

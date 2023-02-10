@@ -1,100 +1,108 @@
 package com.example.firebasead.Recycler;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.example.firebasead.DetallesClienteActivity;
 import com.example.firebasead.R;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.ViewHolder> {
 
-    private ArrayList<PerfilesClientes> perfilesList;
+    private List<PerfilesClientes> perfilesList;
+    private ArrayList<PerfilesClientes> perfilesList2;
+    private final Context context;
 
-    public interface ItemClickListener {
-        void onClick(View view, int position, PerfilesClientes perfilesClientes);
-    }
-
-    private ItemClickListener clickListener;
-
-    public void setClickListener(ItemClickListener itemClickListener) {
-        this.clickListener = itemClickListener;
-    }
-
-    public interface RecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
-
-    private RecyclerViewClickListener listener;
-
-    public AdaptadorListado(ArrayList<PerfilesClientes> dataSet) {
-        perfilesList = dataSet;
-        this.listener = listener;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView nomClienteCajaPerfiles1;
-        private final TextView letraNombre;
-        private final ImageView imagenCajaPerfiles;
-
-        public ViewHolder(View v) {
-            super(v);
-            v.setOnClickListener(this);
-            nomClienteCajaPerfiles1 = (TextView) v.findViewById(R.id.nomClienteCajaPerfiles1);
-            letraNombre = (TextView) v.findViewById(R.id.Letra);
-            imagenCajaPerfiles = (ImageView) v.findViewById(R.id.imagenCajaPerfiles);
-
-        }
-
-
-        public TextView getNomCliente() {
-            return nomClienteCajaPerfiles1;
-        }
-
-        public TextView getLetraNom() {
-            return letraNombre;
-        }
-
-        public ImageView getImagenPerfil() {
-            return imagenCajaPerfiles;
-        }
-
-        public void onClick(View view) {
-            // Si tengo un manejador de evento lo propago con el índice
-            if (clickListener != null) clickListener.onClick(view, getAdapterPosition(), perfilesList.get(getAdapterPosition()));
-        }
-
-    }
-
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.caja_perfiles, viewGroup, false);
-        ViewHolder viewHolder = new ViewHolder(v);
-        return viewHolder;
+    public AdaptadorListado(List<PerfilesClientes> perfilesList, Context context) {
+        this.perfilesList = perfilesList;
+        this.context = context;
+        perfilesList2 = new ArrayList<>();
+        perfilesList2.addAll(perfilesList);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-//      String letraActual = perfilesList.get(position).getLetra();
-//      String letraSiguiente = "";
-        holder.getNomCliente().setText(perfilesList.get(position).getNombre() + " "  + perfilesList.get(position).getApellidos());
-        holder.getLetraNom().setText(perfilesList.get(position).getLetra());
-        //holder.getImagenPerfil().setImageResource(perfilesList.get(position).getImagen());
-//      if (letraActual != letraSiguiente) {
-//          holder.getLetraNom().setText(perfilesList.get(position).getLetra());
-//      }
-//      letraSiguiente = perfilesList.get(position).getLetra();
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.caja_perfiles, parent, false);
+        return new ViewHolder(view);
+    }
+    @Override
+    public void onBindViewHolder(ViewHolder holder,  int position) {
+        PerfilesClientes perfilesClientes=perfilesList.get(position);
+        holder.nombre_cliente.setText(perfilesClientes.getNombre());
+        holder.apellido_cliente.setText(perfilesClientes.getApellido());
+
+        Glide.with(holder.itemView.getContext()).load(perfilesClientes.getImagen()).into(holder.imagen_cliente);
+
+        final int pos=position;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PerfilesClientes clienteSeleccionado = perfilesList.get(pos);
+                Intent intent = new Intent(context, DetallesClienteActivity.class);
+                intent.putExtra("perfil", clienteSeleccionado);
+                context.startActivity(intent);
+            }
+        });
+
+    }
+
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+        TextView nombre_cliente;
+        TextView apellido_cliente;
+        ImageView imagen_cliente;
+
+
+        ViewHolder(View itemView) {
+            super(itemView);
+            nombre_cliente = itemView.findViewById(R.id.nombre_cliente);
+            apellido_cliente = itemView.findViewById(R.id.apellido_cliente);
+            imagen_cliente = itemView.findViewById(R.id.imagen_cliente);
+
+
+        }
     }
 
     @Override
     public int getItemCount() {
         return perfilesList.size();
+    }
+
+
+    public void filtrado(final String txtBuscar) {
+        int longitud = txtBuscar.length();
+        if (longitud == 0) {
+            perfilesList.clear();
+            perfilesList.addAll(perfilesList2);
+        } else {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                List<PerfilesClientes> collecion = perfilesList.stream()
+                        .filter(i -> i.getNombre().toLowerCase().contains(txtBuscar.toLowerCase()))
+                        .collect(Collectors.toList());
+                perfilesList.clear();
+                perfilesList.addAll(collecion);
+            } else {
+                for (PerfilesClientes c : perfilesList2) {
+                    if (c.getNombre().toLowerCase().contains(txtBuscar.toLowerCase())) {
+                        perfilesList.add(c);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
     }
 
 }
