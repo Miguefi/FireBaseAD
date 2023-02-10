@@ -11,7 +11,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginLeft="15dp"
         android:background="@drawable/caja_perfiles">
 
         <!--         app:civ_shadow="true"/> -->
@@ -22,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:layout_weight="1"
+            android:layout_marginLeft="15dp"
+            android:layout_weight="2"
             android:text="Evento"
             android:textColor="#FFFFFF"
             android:textSize="24sp" />

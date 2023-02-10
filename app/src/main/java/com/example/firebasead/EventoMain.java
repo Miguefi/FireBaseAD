@@ -1,8 +1,12 @@
 package com.example.firebasead;
 
+import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -10,13 +14,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.firebasead.InterfazUsuario.InterfazUsuario;
-import com.example.firebasead.Recycler.AdaptadorListado;
-import com.example.firebasead.Recycler.PerfilesClientes;
-import com.example.firebasead.database.FirebaseDao;
+import com.example.firebasead.calendario.AdaptadorEventos;
 import com.example.firebasead.database.Listeners.RetrievalEventListener;
+import com.example.firebasead.database.eventosDatabase.Evento;
+import com.example.firebasead.database.eventosDatabase.EventoDao;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+//import java.sql.Timestamp;
+import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +38,10 @@ public class EventoMain extends AppCompatActivity {
     public static final int NUMERO_PERFILES = 5;
     private static final int CLAVE_LISTA = 55;
     private static final int CLAVE_AÑADIR = 56;
-    RecyclerView RVClientes;
-    AdaptadorListado aL;
-    FloatingActionButton anadirCliente;
-    private ArrayList<PerfilesClientes> perfiles;
-    FirebaseDao firebaseDao;
+    RecyclerView RVEventos;
+    AdaptadorEventos aE = new AdaptadorEventos(new ArrayList<>());
+    FloatingActionButton anyadirEvento;
+    private ArrayList<Evento> eventos = new ArrayList<>();
 
 
     @Override
@@ -37,21 +49,63 @@ public class EventoMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_eventos);
 
-        anadirCliente = findViewById(R.id.añadir);
+        anyadirEvento = findViewById(R.id.añadir);
 
-        RVClientes = (RecyclerView) findViewById(R.id.RVClientes);
-        RVClientes.setHasFixedSize(true);
-        RVClientes.setLayoutManager(new LinearLayoutManager(this));
+        RVEventos = (RecyclerView) findViewById(R.id.RVEventos);
+        RVEventos.setHasFixedSize(true);
+        RVEventos.setLayoutManager(new LinearLayoutManager(this));
 
-        firebaseDao.getAll(new RetrievalEventListener<List>() {
+        EventoDao eventoDao = new EventoDao();
+
+        eventoDao.getAll(new RetrievalEventListener<List<Evento>>() {
             @Override
-            public void OnDataRetrieved(List list) {
-                
+            public void OnDataRetrieved(List<Evento> eventos) {
+                //aE = new AdaptadorEventos(new ArrayList<>(eventos));
+                for (Evento evento: eventos) {
+                    Toast.makeText(EventoMain.this, evento.toString(), Toast.LENGTH_SHORT).show();
+                }
             }
+
         });
 
-        aL = new AdaptadorListado(perfiles);
-        RVClientes.setAdapter(aL);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("Eventos")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                DocumentReference ref = document.getReference();
+                                Evento evento = new Evento();
+                                Timestamp timestamp = (Timestamp) document.get("Inicio");
+                                evento.setId(document.getId());
+                                evento.setTitulo(document.get("Titulo").toString());
+                                evento.setInicio(timestamp.toDate().toString());
+                                eventos.add(evento);
+                                Log.d(TAG, evento.getTitulo()+" " +evento.getInicio()+" "+evento.getId());
+                            }
+                            Log.d(TAG,eventos.get(0).getTitulo()+ " " + eventos.get(0).getInicio());
+                            aE = new AdaptadorEventos(eventos);
+                            RVEventos.setAdapter(aE);
+                            aE.setClickListener(new AdaptadorEventos.ItemClickListener() {
+                                @Override
+                                public void onClick(View view, int position, Evento evento) {
+                                    Intent intent = new Intent(EventoMain.this, com.example.firebasead.EventoDetalle.class);
+                                    intent.putExtra("Detalle", CLAVE_LISTA);
+                                    intent.putExtra("Evento" , evento);
+                                    startActivity(intent);
+                                    Toast.makeText(EventoMain.this, "Estoy pinchando", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+        Log.d(TAG, aE.getItemCount()+" items");
+        //aL = new AdaptadorListado(perfiles);
 
 
         ActivityResultLauncher controladorGestor = registerForActivityResult(
@@ -92,16 +146,7 @@ public class EventoMain extends AppCompatActivity {
 
                 });
 
-        aL.setClickListener(new AdaptadorListado.ItemClickListener() {
-            @Override
-            public void onClick(View view, int position, PerfilesClientes perfilesClientes) {
-                Intent intent = new Intent(EventoMain.this, InterfazUsuario.class);
-                intent.putExtra("Detalle", CLAVE_LISTA);
-                controladorGestor.launch(intent);
-            }
-        });
-
-        anadirCliente.setOnClickListener(new View.OnClickListener() {
+        anyadirEvento.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EventoMain.this, NuevoEvento.class);
@@ -118,5 +163,45 @@ public class EventoMain extends AppCompatActivity {
                 someActivityResultLauncher.launch(intent);
             }
         });*/
+
+        // Initialize Firestore
+//        FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
+//                .setProjectId("your-project-id")
+//                .build();
+//        Firestore db = firestoreOptions.getService();
+//
+//        // Get a reference to the collection
+//        com.google.cloud.firestore.CollectionReference ref = db.collection("your-collection-name");
+//
+//        // Get all documents in the collection
+//        ref.get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+//                        System.out.println(document.getId() + " => " + document.getData());
+//                    }
+//                });
+
+//        try {
+//            FileInputStream serviceAccount = new FileInputStream("path/to/serviceAccountKey.json");
+//
+//            FirebaseOptions options = new FirebaseOptions.Builder()
+//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+//                    .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com")
+//                    .build();
+//
+//            FirebaseApp.initializeApp(options);
+//
+//            FirebaseFirestore db2 = FirestoreOptions.getDefaultInstance().getService();
+//
+//            List<QueryDocumentSnapshot> documents = db2.collection("collectionName").get().get().getDocuments();
+//
+//            for (QueryDocumentSnapshot document : documents) {
+//                System.out.println("Document data: " + document.getData());
+//            }
+//
+//        } catch (Exception e) {
+//            System.out.println("Error reading documents: " + e);
+//        }
+
     }
 }

@@ -21,8 +21,8 @@ public class EventoDao extends FirebaseDao<Evento> {
 
         evento.titulo = dataSnapshot.child("Titulo").getValue().toString();
         evento.descripcion = dataSnapshot.child("Descripcion").getValue().toString();
-        evento.inicio = Timestamp.valueOf(dataSnapshot.child("Inicio").getValue().toString());
-        evento.fin = Timestamp.valueOf(dataSnapshot.child("Fin").getValue().toString());
+        //evento.inicio = Timestamp.valueOf(dataSnapshot.child("Inicio").getValue().toString());
+        //evento.fin = Timestamp.valueOf(dataSnapshot.child("Fin").getValue().toString());
         evento.latitud = Float.parseFloat(dataSnapshot.child("Latitud").getValue().toString());
         evento.longitud = Float.parseFloat(dataSnapshot.child("Longitud").getValue().toString());
 
