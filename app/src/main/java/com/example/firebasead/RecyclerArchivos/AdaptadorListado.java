@@ -27,7 +27,7 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_archivo, viewGroup, false);
+        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.caja_archivos, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -36,8 +36,8 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Archivos archivos = listaArchivos.get(position);
         holder.nombre.setText(archivos.getNombre());
-        holder.id.setText(archivos.getId());
-        holder.propietario.setText(archivos.getPropietario());
+        /*holder.id.setText(archivos.getId());
+        holder.propietario.setText(archivos.getPropietario());*/
     }
 
     @Override
@@ -57,16 +57,18 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView nombre, id, propietario;
+        //private final TextView nombre, id, propietario;
+        private final TextView nombre;
         public ViewHolder(View v) {
             super(v);
             v.setOnClickListener(this);
-            nombre = (TextView) v.findViewById(R.id.idNombre);
-            id = (TextView) v.findViewById(R.id.idArchivo);
-            propietario = (TextView) v.findViewById(R.id.idPropietario);
+            nombre = (TextView) v.findViewById(R.id.idNombreArchivo1);
+            /*id = (TextView) v.findViewById(R.id.idArchivo);
+            propietario = (TextView) v.findViewById(R.id.idPropietario);*/
 
             v.setOnClickListener(this);
         }
+
 
         public void onClick(View view) {
             // Si tengo un manejador de evento lo propago con el índice

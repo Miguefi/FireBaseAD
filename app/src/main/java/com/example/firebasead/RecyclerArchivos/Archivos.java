@@ -8,7 +8,7 @@ import java.util.Date;
 public class Archivos implements Serializable {
 
     public String id;
-    public String idCarpeta;
+
     public String nombre;
     public String propietario;
     public String extension;
@@ -16,18 +16,15 @@ public class Archivos implements Serializable {
     public String fechaCreacion;
 
 
-    public Archivos(String id, String idCarpeta, String nombre, String propietario, String extension, String dniCliente, String fechaCreacion) {
-        this.id = id;
-        this.idCarpeta = idCarpeta;
-        this.nombre = nombre;
-        this.propietario = propietario;
-        this.extension = extension;
-        this.dniCliente = dniCliente;
-        this.fechaCreacion = fechaCreacion;
+    public Archivos() {
     }
 
-    public Archivos() {
-
+    public Archivos(String s_nombre, String s_propietario, String s_dni, String s_fecha, String s_extension) {
+        this.nombre = s_nombre;
+        this.propietario = s_propietario;
+        this.extension = s_dni;
+        this.dniCliente = s_fecha;
+        this.fechaCreacion = s_extension;
     }
 
     public String getId() {
@@ -38,13 +35,6 @@ public class Archivos implements Serializable {
         this.id = id;
     }
 
-    public String getIdCarpeta() {
-        return idCarpeta;
-    }
-
-    public void setIdCarpeta(String idCarpeta) {
-        this.idCarpeta = idCarpeta;
-    }
 
     public String getNombre() {
         return nombre;

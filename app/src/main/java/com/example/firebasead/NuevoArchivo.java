@@ -15,6 +15,7 @@ import com.example.firebasead.RecyclerArchivos.AdaptadorListado;
 import com.example.firebasead.RecyclerArchivos.Archivos;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,9 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 public class NuevoArchivo extends AppCompatActivity {
-
     private RecyclerView recyclerView;
-    private Button agregar;
+    private FloatingActionButton agregar;
     private AdaptadorListado adapter;
     FirebaseFirestore db;
     private List<Archivos> listaPerfiles;
@@ -55,13 +55,11 @@ public class NuevoArchivo extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     Archivos archivo = new Archivos();
-                    archivo.setId(document.get("ID").toString());
                     archivo.setNombre(document.get("Nombre").toString());
                     archivo.setPropietario(document.get("Propietario").toString());
                     archivo.setDniCliente(document.get("DNI_Cliente").toString());
                     archivo.setFechaCreacion(document.get("FechaCreacion").toString());
                     archivo.setExtension(document.get("Extencion").toString());
-                    archivo.setIdCarpeta(document.get("ID_Carpeta").toString());
                     listaPerfiles.add(archivo);
                 }
 
@@ -75,6 +73,13 @@ public class NuevoArchivo extends AppCompatActivity {
             }
         });
 
-
+        agregar = findViewById(R.id.añadirArchivo);
+        agregar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NuevoArchivo.this, AgregarArchivo.class));
+                finish();
+            }
+        });
     }
 }
