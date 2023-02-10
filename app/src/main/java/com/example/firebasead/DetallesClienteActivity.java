@@ -28,6 +28,7 @@ import java.util.Map;
 public class DetallesClienteActivity extends AppCompatActivity {
 
     TextView nombre,apellido,dni,dniGestor,telefono,contraseña;
+
     ImageView imgCliente;
 
     AdaptadorListado adapter;
