@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.firebasead.calendario.AdaptadorEventos;
 import com.example.firebasead.database.eventosDatabase.Evento;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -24,10 +23,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.text.SimpleDateFormat;
+
 public class EventoDetalle extends AppCompatActivity {
 
     TextView tituloEventoDetalle, inicioEventoDetalle, finEventoDetalle, latitudEventoDetalle, longitudEventoDetalle, descripcionEventoDetalle;
     Button modificarEvento, eliminarEvento;
+
+    String pattern = "dd-MM HH:mm";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +71,8 @@ public class EventoDetalle extends AppCompatActivity {
                                 Timestamp timestampInicio = (Timestamp) document.get("Inicio");
                                 Timestamp timestampFin = (Timestamp) document.get("Fin");
                                 tituloEventoDetalle.setText(tituloEventoDetalle.getText() + " " + document.get("Titulo").toString());
-                                inicioEventoDetalle.setText(inicioEventoDetalle.getText() + " " + timestampInicio.toDate().toString());
-                                finEventoDetalle.setText(finEventoDetalle.getText() + " " + timestampFin.toDate().toString());
+                                inicioEventoDetalle.setText(inicioEventoDetalle.getText() + " " + simpleDateFormat.format(timestampInicio.toDate()));
+                                finEventoDetalle.setText(finEventoDetalle.getText() + " " + simpleDateFormat.format(timestampFin.toDate()));
                                 latitudEventoDetalle.setText(latitudEventoDetalle.getText() + " " + document.get("Latitud").toString());
                                 longitudEventoDetalle.setText(longitudEventoDetalle.getText() + " " + document.get("Longitud").toString());
                                 descripcionEventoDetalle.setText(descripcionEventoDetalle.getText() + " " + document.get("Descripcion").toString());

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         eventos.setOnClickListener(v -> {
             actualizarDatosGestor();
-            Intent intent = new Intent(getApplicationContext(), GestorMain.class); //CAMBIAR ACTIVIDAD
+            Intent intent = new Intent(getApplicationContext(), EventoMain.class); //CAMBIAR ACTIVIDAD
             Bundle bundle14 = new Bundle();
             bundle14.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle14);

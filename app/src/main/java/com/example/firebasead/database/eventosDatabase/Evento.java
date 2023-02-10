@@ -12,20 +12,23 @@ public class Evento implements Serializable {
     @Exclude
     public String id;
 
+    public String titulo;
     public String inicio;
-    public Timestamp fin;
+    public String fin;
     public float latitud;
     public float longitud;
-    public String titulo;
     public String descripcion;
 
     public Evento(){
-        String inicio = this.inicio;
-        Timestamp fin = this.fin;
-        float latitud = this.latitud;
-        float longitud = this.longitud;
-        String titulo = this.titulo;
-        String descripcion = this.descripcion;
+    }
+
+    public Evento(String titulo, String inicio, String fin, float latitud, float longitud, String descripcion){
+        titulo = this.titulo;
+        inicio = this.inicio;
+        fin = this.fin;
+        latitud = this.latitud;
+        longitud = this.longitud;
+        descripcion = this.descripcion;
     }
 
     public String getId() {
@@ -44,11 +47,11 @@ public class Evento implements Serializable {
         this.inicio = inicio;
     }
 
-    public Timestamp getFin() {
+    public String getFin() {
         return fin;
     }
 
-    public void setFin(Timestamp fin) {
+    public void setFin(String fin) {
         this.fin = fin;
     }
 

@@ -30,6 +30,8 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 //import java.sql.Timestamp;
 import com.google.firebase.Timestamp;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class EventoMain extends AppCompatActivity {
     AdaptadorEventos aE = new AdaptadorEventos(new ArrayList<>());
     FloatingActionButton anyadirEvento;
     private ArrayList<Evento> eventos = new ArrayList<>();
+    String pattern = "dd-MM HH:mm";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
     @Override
@@ -55,18 +59,18 @@ public class EventoMain extends AppCompatActivity {
         RVEventos.setHasFixedSize(true);
         RVEventos.setLayoutManager(new LinearLayoutManager(this));
 
-        EventoDao eventoDao = new EventoDao();
-
-        eventoDao.getAll(new RetrievalEventListener<List<Evento>>() {
-            @Override
-            public void OnDataRetrieved(List<Evento> eventos) {
-                //aE = new AdaptadorEventos(new ArrayList<>(eventos));
-                for (Evento evento: eventos) {
-                    Toast.makeText(EventoMain.this, evento.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-
-        });
+//        EventoDao eventoDao = new EventoDao();
+//
+//        eventoDao.getAll(new RetrievalEventListener<List<Evento>>() {
+//            @Override
+//            public void OnDataRetrieved(List<Evento> eventos) {
+//                //aE = new AdaptadorEventos(new ArrayList<>(eventos));
+//                for (Evento evento: eventos) {
+//                    Toast.makeText(EventoMain.this, evento.toString(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//        });
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Eventos")
@@ -82,7 +86,7 @@ public class EventoMain extends AppCompatActivity {
                                 Timestamp timestamp = (Timestamp) document.get("Inicio");
                                 evento.setId(document.getId());
                                 evento.setTitulo(document.get("Titulo").toString());
-                                evento.setInicio(timestamp.toDate().toString());
+                                evento.setInicio(simpleDateFormat.format(timestamp.toDate()));
                                 eventos.add(evento);
                                 Log.d(TAG, evento.getTitulo()+" " +evento.getInicio()+" "+evento.getId());
                             }
