@@ -37,7 +37,7 @@ public class AgregarArchivo extends AppCompatActivity {
             String s_nombre = nombre.getText().toString(), s_propietario = propietario.getText().toString(),
             s_dni = dniPropietario.getText().toString(), s_fecha = fechaFin.getText().toString(), s_extension = extension.getText().toString();
 
-            Map<String, Object> evento = new HashMap<>();
+            Map<String, Object> evento = new HashMap<>() ;
             evento.put("Nombre", s_nombre);
             evento.put("Propietario", s_propietario);
             evento.put("DNI_Cliente", s_dni);
