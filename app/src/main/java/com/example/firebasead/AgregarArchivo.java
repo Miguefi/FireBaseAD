@@ -3,7 +3,6 @@ package com.example.firebasead;
 import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayoutStates;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,10 +12,7 @@ import android.widget.TextView;
 
 import com.example.firebasead.RecyclerArchivos.Archivos;
 import com.example.firebasead.database.eventosDatabase.Evento;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,34 +37,15 @@ public class AgregarArchivo extends AppCompatActivity {
             String s_nombre = nombre.getText().toString(), s_propietario = propietario.getText().toString(),
             s_dni = dniPropietario.getText().toString(), s_fecha = fechaFin.getText().toString(), s_extension = extension.getText().toString();
 
-            db.collection("Archivos")
-                    .orderBy("ID", Query.Direction.DESCENDING)
-                    .limit(1)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            int highestID = 0;
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Obtener el ID más alto de los documentos existentes
-                                highestID = document.getLong("ID").intValue();
-                            }
+            Map<String, Object> evento = new HashMap<>() ;
+            evento.put("Nombre", s_nombre);
+            evento.put("Propietario", s_propietario);
+            evento.put("DNI_Cliente", s_dni);
+            evento.put("FechaCreacion", s_fecha);
+            evento.put("Extencion", s_extension);
 
-                            // Incrementar el ID más alto en uno
-                            highestID++;
-
-                            // Crear un nuevo documento con el ID resultante
-                            DocumentReference newDocument = db.collection("Archivos").document();
-                            Map<String, Object> archivo = new HashMap<>();
-                            archivo.put("ID", highestID);
-                            archivo.put("Nombre", s_nombre);
-                            archivo.put("Propietario", s_propietario);
-                            archivo.put("DNI_Cliente", s_dni);
-                            archivo.put("FechaCreacion", s_fecha);
-                            archivo.put("Extencion", s_extension);
-                            newDocument.set(archivo);
-                        } else {
-                            Log.w(ConstraintLayoutStates.TAG, "Error al recuperar el último documento", task.getException());
-                        }
+            db.collection("Archivos").add(evento).addOnSuccessListener(documentReference -> {
+                        Archivos archivo = new Archivos(s_nombre, s_propietario, s_dni, s_fecha, s_extension);
                         startActivity(new Intent(AgregarArchivo.this, NuevoArchivo.class));
                         finish();
             });

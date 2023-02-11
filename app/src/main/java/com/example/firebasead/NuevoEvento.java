@@ -34,6 +34,8 @@ import java.util.Map;
 
 public class NuevoEvento extends AppCompatActivity {
 
+    public static final int CLAVE_INSERTADO = 55;
+
     EditText titulo, fechaInicio, horaInicio, fechaFin, horaFin, latitud, longitud, descripcion;
     Button crearEvento;
 
@@ -69,30 +71,31 @@ public class NuevoEvento extends AppCompatActivity {
            public void onClick(View v) {
 
                String s_titulo = titulo.getText().toString(), s_descripcion = descripcion.getText().toString();
-               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm.SSS'Z'");
-               String stringDateInicio = fechaInicio.getText().toString() + horaInicio.getText().toString();
-               String stringDateFin = fechaFin.getText().toString() + horaFin.getText().toString();
-               Log.d(TAG, stringDateInicio + " " + stringDateFin);
+               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+               String stringDateInicio = fechaInicio.getText().toString() + " " + horaInicio.getText().toString();
+               String stringDateFin = fechaFin.getText().toString() + " " + horaFin.getText().toString();
                Date dateInicio = null;
                Date dateFin = null;
+
                try {
                    dateInicio = simpleDateFormat.parse(stringDateInicio);
                    dateFin = simpleDateFormat.parse(stringDateFin);
                } catch (ParseException e) {
                    Log.d(TAG, e.toString());
                }
-               Log.d(TAG, dateInicio.toString() + " " + dateFin.toString());
+
+               Timestamp timeStampInicio = new Timestamp(dateInicio);
+               Timestamp timeStampFin = new Timestamp(dateFin);
                Float s_latitud = Float.valueOf(latitud.getText().toString()), s_longitud = Float.valueOf(longitud.getText().toString());
-               Log.d(TAG, s_latitud + " " + s_longitud);
+
                Map<String, Object> evento = new HashMap<>();
                evento.put("Titulo", s_titulo);
-               evento.put("Inicio", dateInicio.getTime());
-               evento.put("Fin", dateFin.getTime());
+               evento.put("Inicio", timeStampInicio);
+               evento.put("Fin", timeStampFin);
                evento.put("Latitud", s_latitud);
                evento.put("Longitud", s_longitud);
                evento.put("Descripcion", s_descripcion);
 
-               Log.d(TAG, evento.toString());
 
                db.collection("Eventos").add(evento).addOnSuccessListener(documentReference -> {
                            Log.d(TAG, "Insertado evento con ID: " + documentReference.getId());
@@ -104,9 +107,13 @@ public class NuevoEvento extends AppCompatActivity {
 //                        bundle.putSerializable("Evento", (Serializable) eventoObject);
 //                        intent.putExtras(bundle);
 //                        startActivity(intent);
-                           finish();
                        })
-                       .addOnFailureListener(e -> Log.w(TAG, "Error insert evento", e));
+                       .addOnFailureListener(e -> Log.w(TAG, "Error insertando evento", e));
+
+               Intent intent = new Intent(NuevoEvento.this, EventoMain.class);
+               setResult(CLAVE_INSERTADO , intent);
+               NuevoEvento.super.onBackPressed();
+               finish();
 
            }
 
@@ -198,7 +205,7 @@ public class NuevoEvento extends AppCompatActivity {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                 // +1 because January is zero
-                final String selectedDate = year + "-" + (month+1) + "-" + day;
+                final String selectedDate = day + "-" + (month+1) + "-" + year;
                 fecha.setText(selectedDate);
             }
         });
@@ -240,11 +247,11 @@ public class NuevoEvento extends AppCompatActivity {
             @Override
             public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
                 // +1 because January is zero
-                final String selectedHour = hourOfDay + " : " + minute;
+                final String selectedHour = hourOfDay + ":" + minute;
                 hora.setText(selectedHour);
             }
         });
 
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 }

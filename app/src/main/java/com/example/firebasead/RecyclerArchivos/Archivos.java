@@ -7,10 +7,9 @@ import java.util.Date;
 
 public class Archivos implements Serializable {
 
-    public long id;
+    public String id;
 
     public String nombre;
-
     public String propietario;
     public String extension;
     public String dniCliente;
@@ -28,11 +27,11 @@ public class Archivos implements Serializable {
         this.fechaCreacion = s_extension;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

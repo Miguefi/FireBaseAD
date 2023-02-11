@@ -4,11 +4,14 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -40,13 +43,14 @@ public class GestorMain extends AppCompatActivity implements SearchView.OnQueryT
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_perfiles);
 
+
         searchView = findViewById(R.id.buscador);
         searchView.setOnQueryTextListener(this);
 
         perfiles = new ArrayList<>();
         RVClientes = findViewById(R.id.RVClientes);
         RVClientes.setLayoutManager(new LinearLayoutManager(this));
-        al = new AdaptadorListado(perfiles,this);
+
 
 
 
@@ -64,22 +68,35 @@ public class GestorMain extends AppCompatActivity implements SearchView.OnQueryT
                     perfilesClientes.setDni_gestor(document.get("DNI_Gestor").toString());
                     perfilesClientes.setTel(document.get("Num_Tel").toString());
                     perfilesClientes.setContraseña(document.get("Contraseña").toString());
-                    //perfilesClientes.setImagen(document.get("Imagen").toString());
                     perfiles.add(perfilesClientes);
 
 
                 }
+                al = new AdaptadorListado(perfiles,GestorMain.this);
+                RVClientes.setAdapter(al);
                 al.notifyDataSetChanged();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(GestorMain.this, "Error al cargar los datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GestorMain.this, "Error al cargar los datos ", Toast.LENGTH_SHORT).show();
 
             }
         });
 
-        RVClientes.setAdapter(al);
+
+
+        anadirCliente=findViewById(R.id.añadir_cliente);
+        anadirCliente.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GestorMain.this, AgregarCliente.class));
+                finish();
+            }
+        });
+
+
+
     }
 
     @Override

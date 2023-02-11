@@ -1,190 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/EventoDetalle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:orientation="vertical"
+    android:textAlignment="center"
     tools:context=".DetallesClienteActivity">
 
+    <LinearLayout
+        android:id="@+id/Cabezera"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/alto_boton"
+        android:background="@color/earlie_black"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/imagen_cliente_detalle"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:contentDescription="imagen_cliente"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/dots" />
 
-    <TextView
-        android:id="@+id/textView_nombre_valor"
-        android:layout_width="wrap_content"
+        <SearchView
+            android:id="@+id/buscador"
+            android:layout_width="236dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/borde_encabezado"
+            android:searchIcon="@drawable/ic_search">
+
+        </SearchView>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+
+            android:id="@+id/imagenCajaCliente"
+            android:layout_width="33dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:src="@drawable/pexels_polina_kovaleva_5927743"
+            tools:srcCompat="@tools:sample/avatars" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/EventoDetallado"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="NOMBRE"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imagen_cliente_detalle"
-        app:layout_constraintBottom_toTopOf="@+id/nombre_detalle" />
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/nombre_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:hint="nombre"
-        android:gravity="center_horizontal"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_nombre_valor"
-        app:layout_constraintTop_toBottomOf="@+id/imagen_cliente_detalle" />
+        <TextView
+            android:id="@+id/cabeceraEventoDetalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Cliente"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView_apellido_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="APELLIDO"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nombre_detalle"
-       />
+        <TextView
+            android:id="@+id/nombre_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:layout_marginBottom="10dp"
+            android:text="Nombre: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/apellido_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Apellido: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/apellido_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:gravity="center_horizontal"
-        android:hint="apellido"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_apellido_valor"
-        app:layout_constraintTop_toBottomOf="@+id/nombre_detalle" />
+        <TextView
+            android:id="@+id/dni_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="DNI: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
+        <TextView
+            android:id="@+id/dnigestor_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="DNIGestor: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/textView_dni_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="DNI"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/apellido_detalle" />
+        <TextView
+            android:id="@+id/contraseña_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Contraseña: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/dni_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:hint="dni"
-        android:layout_margin="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_dni_valor"
-        app:layout_constraintTop_toBottomOf="@+id/apellido_detalle" />
-
-
-    <TextView
-        android:id="@+id/textView_dnigestor_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="4dp"
-        android:text="DNIGESTOR"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dni_detalle" />
-
-    <TextView
-        android:id="@+id/dnigestor_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:hint="dnigestor"
-        android:layout_margin="20dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_dnigestor_valor"
-        app:layout_constraintTop_toBottomOf="@+id/dni_detalle" />
-
-    <TextView
-        android:id="@+id/textView_contraseña_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CONTRASEÑA"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dnigestor_detalle" />
-
-    <TextView
-        android:id="@+id/contraseña_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:hint="Contraseña"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_contraseña_valor"
-        app:layout_constraintTop_toBottomOf="@+id/dnigestor_detalle" />
-
-    <TextView
-        android:id="@+id/textView_telefono_valor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="TELEFONO"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/contraseña_detalle" />
+        <TextView
+            android:id="@+id/telefono_detalle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="Teléfono: "
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
 
-    <TextView
-        android:id="@+id/telefono_detalle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_margin="20dp"
-        android:hint="telefono"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView_telefono_valor"
-        app:layout_constraintTop_toBottomOf="@+id/contraseña_detalle" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <Button
-            android:id="@+id/boton_borrar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="10dp"
-            android:text="Borrar cliente" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/boton_actualizar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Actualizar cliente" />
+            android:layout_weight="1"
+            android:text="Modificar  Cliente" />
 
+        <Button
+            android:id="@+id/boton_borrar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Eliminar Cliente" />
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
+</LinearLayout>

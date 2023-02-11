@@ -1,5 +1,6 @@
 package com.example.firebasead.Recycler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -44,8 +45,6 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
         holder.nombre_cliente.setText(perfilesClientes.getNombre());
         holder.apellido_cliente.setText(perfilesClientes.getApellido());
 
-        //Glide.with(holder.itemView.getContext()).load(perfilesClientes.getImagen()).into(holder.imagen_cliente);
-
         final int pos=position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,6 +53,7 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
                 Intent intent = new Intent(context, DetallesClienteActivity.class);
                 intent.putExtra("perfil", clienteSeleccionado);
                 context.startActivity(intent);
+                ((Activity) v.getContext()).finish();
             }
         });
 

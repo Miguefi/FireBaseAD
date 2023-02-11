@@ -56,7 +56,7 @@
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/añadir"
+        android:id="@+id/añadir_cliente"
         android:layout_width="375dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end"

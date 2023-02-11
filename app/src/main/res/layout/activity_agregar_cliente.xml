@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient"
-    tools:context=".ModificarArchivo">
+    tools:context=".AgregarCliente">
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/modificarNombreArchivo"
+            android:id="@+id/nombre_agregar_cliente"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,11 +37,11 @@
             android:backgroundTint="@color/white" />
 
         <EditText
-            android:id="@+id/modificarNombrePropietario"
+            android:id="@+id/apellido_agregar_cliente"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nombre del Propietario"
+            android:hint="Apellido"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -52,11 +52,11 @@
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
         <EditText
-            android:id="@+id/modificarDniPropietarioCrear"
+            android:id="@+id/dniClienteCrear"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="DNI del propietario"
+            android:hint="DNI Cliente"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -67,11 +67,11 @@
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
         <EditText
-            android:id="@+id/modificarFechaFinCrearArchivo"
+            android:id="@+id/DniGestorCrear"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Fecha de Fin"
+            android:hint="Dni Gestor"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -84,11 +84,27 @@
 
 
         <EditText
-            android:id="@+id/modificarExtensionCrearArchivo"
+            android:id="@+id/Contraseña_crear_cliente"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Extensión"
+            android:hint="Contraseña"
+            android:inputType="text"
+            android:maxLength="180"
+            android:maxLines="1"
+            android:minEms="20"
+            android:textCursorDrawable="@null"
+            android:textSize="@dimen/day_text_size"
+            android:textColor="@color/white"
+            android:textColorHint="@color/hint_white"
+            android:backgroundTint="@color/white" />
+
+        <EditText
+            android:id="@+id/tel_cliente_crear"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Teléfono"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -100,11 +116,11 @@
             android:backgroundTint="@color/white" />
 
         <Button
-            android:id="@+id/modificarArchivo"
+            android:id="@+id/crearCliente"
             android:layout_width="@dimen/ancho_cajas_texto"
             android:layout_height="@dimen/alto_boton"
             android:backgroundTint="#00000000"
-            android:text="Actualizar archivo"
+            android:text="Agregar Cliente"
             android:textSize="16sp"
             android:textStyle="bold"
             app:strokeColor="@color/white"

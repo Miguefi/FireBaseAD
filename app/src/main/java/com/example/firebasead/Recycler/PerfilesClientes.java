@@ -12,18 +12,17 @@ public class PerfilesClientes implements Serializable {
     public String dni_cliente;
     public String dni_gestor;
     public String tel;
-    public String imagen;
 
     public PerfilesClientes() {}
 
-    public PerfilesClientes(String nombre, String apellido, String contraseña, String dni_cliente, String dni_gestor, String tel,String imagen) {
+    public PerfilesClientes(String nombre, String apellido, String contraseña, String dni_cliente, String dni_gestor, String tel) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.contraseña = contraseña;
         this.dni_cliente = dni_cliente;
         this.dni_gestor = dni_gestor;
         this.tel = tel;
-        this.imagen=imagen;
+
     }
 
     public String getNombre() {
@@ -74,11 +73,4 @@ public class PerfilesClientes implements Serializable {
         this.tel = tel;
     }
 
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
 }

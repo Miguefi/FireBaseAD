@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.SearchView;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.firebasead.RecyclerArchivos.AdaptadorListado;
@@ -21,34 +21,27 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NuevoArchivo extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton agregar;
-    AdaptadorListado adapter;
-    private FirebaseFirestore db;
+    private AdaptadorListado adapter;
+    FirebaseFirestore db;
     private List<Archivos> listaPerfiles;
-    private SearchView buscador;
+
+    private  List<Archivos> archivo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_archivo);
-        buscador = findViewById(R.id.buscadorArchivo);
-        buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String nombre) {
-                adapter.filtrado(nombre);
-                return false;
-            }
-        });
 
         listaPerfiles = new ArrayList<>();
         recyclerView = findViewById(R.id.idRecycler);
@@ -62,7 +55,6 @@ public class NuevoArchivo extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     Archivos archivo = new Archivos();
-                    archivo.setId(document.getLong("ID"));
                     archivo.setNombre(document.get("Nombre").toString());
                     archivo.setPropietario(document.get("Propietario").toString());
                     archivo.setDniCliente(document.get("DNI_Cliente").toString());
@@ -88,8 +80,5 @@ public class NuevoArchivo extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
-
 }

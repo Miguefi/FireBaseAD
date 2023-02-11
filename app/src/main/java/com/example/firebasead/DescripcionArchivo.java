@@ -35,6 +35,7 @@ public class DescripcionArchivo extends AppCompatActivity {
 
     private TextView nombre, propietario, dniPropietario, extension, fecha;
     private Button modificar, borrar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,66 +47,55 @@ public class DescripcionArchivo extends AppCompatActivity {
         extension = findViewById(R.id.idExtensionArchivo);
         fecha = findViewById(R.id.idFechaArchivo);
         borrar = findViewById(R.id.idBorrarArchivo);
-        modificar = findViewById(R.id.idModificarArchivo);
+
         Archivos archivo = (Archivos) getIntent().getSerializableExtra("archivo");
 
         String nombreArchivo = archivo.getNombre();
-        String id = String.valueOf(archivo.getId());
-        Toast.makeText(this, "ESTE ID: "+ id, Toast.LENGTH_SHORT).show();
         nombre.setText("Nombre: " + archivo.getNombre());
-        propietario.setText("Propietario: " +archivo.getPropietario());
-        dniPropietario.setText("DNI: " +archivo.getDniCliente());
-        extension.setText("Extensión: " +archivo.getExtension());
-        fecha.setText("Fecha fin: " +archivo.getFechaCreacion());
+        propietario.setText("Propietario: " + archivo.getPropietario());
+        dniPropietario.setText("DNI: " + archivo.getDniCliente());
+        extension.setText("Extensión: " + archivo.getExtension());
+        fecha.setText("Fecha fin: " + archivo.getFechaCreacion());
 
         borrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
-                db.collection("Archivos").whereEqualTo("Nombre",nombreArchivo)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentReference ref = null;
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                ref = document.getReference();
+                db.collection("Archivos").whereEqualTo("Nombre", nombreArchivo)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentReference ref = null;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(ConstraintLayoutStates.TAG, document.getId() + " => " + document.getData());
+                                        ref = document.getReference();
+                                    }
+
+                                    // DELETE
+                                    DocumentReference finalRef = ref;
+                                    new AlertDialog.Builder(DescripcionArchivo.this)
+                                            .setTitle("¿Estás seguro de que deseas eliminar el archivo?")
+                                            .setMessage("El archivo desaparecerá de la base de datos y no podrás recuperarlo")
+                                            .setIcon(android.R.drawable.ic_dialog_alert)
+                                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int whichButton) {
+                                                    assert finalRef != null;
+                                                    finalRef.delete().addOnSuccessListener(aVoid -> Toast.makeText(DescripcionArchivo.this, "Archivo eliminado!", Toast.LENGTH_LONG).show())
+                                                            .addOnFailureListener(e -> Toast.makeText(DescripcionArchivo.this, "Error eliminando archivo " + e, Toast.LENGTH_LONG).show());
+                                                    startActivity(new Intent(DescripcionArchivo.this, NuevoArchivo.class));
+                                                    finish();
+                                                }
+                                            })
+                                            .setNegativeButton(android.R.string.no, null).show();
+                                } else {
+                                    Log.w(ConstraintLayoutStates.TAG, "Error select documento.", task.getException());
+                                }
                             }
-
-                            // DELETE
-                            DocumentReference finalRef = ref;
-                            new AlertDialog.Builder(DescripcionArchivo.this)
-                                    .setTitle("¿Estás seguro de que deseas eliminar el archivo?")
-                                    .setMessage("El archivo desaparecerá de la base de datos y no podrás recuperarlo")
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int whichButton) {
-                                            assert finalRef != null;
-                                            finalRef.delete().addOnSuccessListener(aVoid -> Toast.makeText(DescripcionArchivo.this, "Archivo eliminado!", Toast.LENGTH_LONG).show())
-                                    .addOnFailureListener(e -> Toast.makeText(DescripcionArchivo.this, "Error eliminando archivo " + e, Toast.LENGTH_LONG).show());
-                                            startActivity(new Intent(DescripcionArchivo.this, NuevoArchivo.class));
-                                            finish();
-                                        }})
-                                    .setNegativeButton(android.R.string.no, null).show();
-                        } else {
-                            Log.w(ConstraintLayoutStates.TAG, "Error select documento.", task.getException());
-                        }
-                    }
-                });
+                        });
             }
 
-        });
-
-        modificar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(DescripcionArchivo.this, ModificarArchivo.class);
-                intent.putExtra("modificarArchivo", archivo);
-                startActivity(intent);
-                finish();
-            }
         });
     }
 }
