@@ -79,7 +79,7 @@ public class GestorMain extends AppCompatActivity implements SearchView.OnQueryT
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(GestorMain.this, "Error al cargar los datos", Toast.LENGTH_SHORT).show();
+                Toast.makeText(GestorMain.this, "Error al cargar los datos ", Toast.LENGTH_SHORT).show();
 
             }
         });

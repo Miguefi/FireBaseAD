@@ -58,10 +58,12 @@ public class DetallesClienteActivity extends AppCompatActivity {
 
         PerfilesClientes perfil = (PerfilesClientes) getIntent().getSerializableExtra("perfil");
 
+
         botonActualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DetallesClienteActivity.this, EditarCliente.class);
+                intent.putExtra("dni", perfil.getDni_cliente());
                 startActivity(intent);
             }
         });

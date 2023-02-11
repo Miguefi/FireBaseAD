@@ -1,5 +1,6 @@
 package com.example.firebasead.Recycler;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -52,6 +53,7 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
                 Intent intent = new Intent(context, DetallesClienteActivity.class);
                 intent.putExtra("perfil", clienteSeleccionado);
                 context.startActivity(intent);
+                ((Activity) v.getContext()).finish();
             }
         });
 
