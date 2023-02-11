@@ -1,5 +1,6 @@
 package com.example.firebasead.RecyclerArchivos;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,16 +14,39 @@ import com.example.firebasead.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.ViewHolder> {
 
     private List<Archivos> listaArchivos;
-    ArrayList<Archivos> arrayListaArchivos;
+    private ArrayList<Archivos> arrayListaArchivos;
 
     public AdaptadorListado(List<Archivos> listaArchivos) {
         this.listaArchivos = listaArchivos;
         arrayListaArchivos = new ArrayList<>();
         arrayListaArchivos.addAll(listaArchivos);
+    }
+    public void filtrado(final String nombreArchivo) {
+            int longitud = nombreArchivo.length();
+            if (longitud == 0) {
+                listaArchivos.clear();
+                listaArchivos.addAll(arrayListaArchivos);
+            } else {
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    List<Archivos> collecion = listaArchivos.stream()
+                            .filter(i -> i.getNombre().toLowerCase().contains(nombreArchivo.toLowerCase()))
+                            .collect(Collectors.toList());
+                    listaArchivos.clear();
+                    listaArchivos.addAll(collecion);
+                } else {
+                    for (Archivos c : arrayListaArchivos) {
+                        if (c.getNombre().toLowerCase().contains(nombreArchivo.toLowerCase())) {
+                            listaArchivos.add(c);
+                        }
+                    }
+                }
+            }
+            notifyDataSetChanged();
     }
 
     @Override
@@ -72,6 +96,7 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
             Intent intent = new Intent(view.getContext(), DescripcionArchivo.class);
             intent.putExtra("archivo", archivo);
             view.getContext().startActivity(intent);
+            ((Activity) view.getContext()).finish();
         }
 
     }
