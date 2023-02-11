@@ -56,19 +56,46 @@ public class EventoMain extends AppCompatActivity {
         RVEventos.setHasFixedSize(true);
         RVEventos.setLayoutManager(new LinearLayoutManager(this));
 
-//        EventoDao eventoDao = new EventoDao();
-//
-//        eventoDao.getAll(new RetrievalEventListener<List<Evento>>() {
-//            @Override
-//            public void OnDataRetrieved(List<Evento> eventos) {
-//                //aE = new AdaptadorEventos(new ArrayList<>(eventos));
-//                for (Evento evento: eventos) {
-//                    Toast.makeText(EventoMain.this, evento.toString(), Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//        });
+        poblarRecyclerView();
 
+        anyadirEvento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventoMain.this, NuevoEvento.class);
+                intent.putExtra("Añadir", CLAVE_AÑADIR);
+                controladorGestor.launch(intent);
+            }
+        });
+
+    }
+
+    ActivityResultLauncher controladorGestor = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                //Log.d(TAG, "Vuelve cancelado");
+                int code = result.getResultCode();
+                switch (code) {
+                    case RESULT_CANCELED:
+                        break;
+                    case NuevoEvento.CLAVE_INSERTADO:
+                        Log.d(TAG, "EVENTO INSERTADO");
+                        poblarRecyclerView();
+                        break;
+
+                    case EventoDetalle.CLAVE_MODIFICADO:
+                        Log.d(TAG, "EVENTO MODIFICADO");
+                        poblarRecyclerView();
+                        break;
+
+                    case EventoDetalle.CLAVE_ELIMINADO:
+                        Log.d(TAG, "EVENTO ELIMINADO");
+                        poblarRecyclerView();
+                        break;
+
+                }
+
+            });
+
+    public void poblarRecyclerView() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Eventos")
                 .get()
@@ -76,6 +103,7 @@ public class EventoMain extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            eventos = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d(TAG, document.getId() + " => " + document.getData());
                                 DocumentReference ref = document.getReference();
@@ -105,103 +133,5 @@ public class EventoMain extends AppCompatActivity {
                         }
                     }
                 });
-        //aL = new AdaptadorListado(perfiles);
-
-
-        ActivityResultLauncher controladorGestor = registerForActivityResult(
-                new ActivityResultContracts.StartActivityForResult(), result -> {
-                    //Log.d(TAG, "Vuelve cancelado");
-                    int code = result.getResultCode();
-                    /*switch (code) {
-                        case RESULT_CANCELED:
-                            break;
-                        case CLAVE_INGRESAR:
-                            Log.d(TAG, "NUEVO INGRESO");
-                            PerfilesImagen nuevoPerfil = (PerfilesImagen) result.getData().getSerializableExtra(mensaje);
-                            completo.add(nuevoPerfil);
-                            contactoDao.insert(nuevoPerfil);
-                            AdaptadorListado = new AdaptadorListado(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                        case CLAVE_VOLVER:
-                            AdaptadorListado = new AdaptadorListado(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                        case CLAVE_ELIMINAR:
-                            Log.d(TAG, "NUEVO ELIMINADO");
-                            //Intent elim = result.getData();
-                            String nom = result.getData().getStringExtra(mensaje2);
-                            Log.d(TAG, nom);
-                            PerfilesImagen elimPerfil = contactoDao.findByName(nom);
-                            Log.d(TAG, elimPerfil.getNombre());
-                            completo.remove(elimPerfil);
-                            contactoDao.delete(elimPerfil);
-                            AdaptadorListado = new AdaptadorImagen(completo, listener);
-                            rV.setAdapter(AdaptadorListado);
-                            break;
-
-                    }*/
-
-                });
-
-        anyadirEvento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EventoMain.this, NuevoEvento.class);
-                intent.putExtra("Añadir", CLAVE_AÑADIR);
-                controladorGestor.launch(intent);
-            }
-        });
-    /*
-        anadirCliente.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(GestorMain.this, Ingresar.class);
-                intent.putExtra(CLAVE_LISTA, completo);
-                someActivityResultLauncher.launch(intent);
-            }
-        });*/
-
-        // Initialize Firestore
-//        FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
-//                .setProjectId("your-project-id")
-//                .build();
-//        Firestore db = firestoreOptions.getService();
-//
-//        // Get a reference to the collection
-//        com.google.cloud.firestore.CollectionReference ref = db.collection("your-collection-name");
-//
-//        // Get all documents in the collection
-//        ref.get()
-//                .addOnSuccessListener(queryDocumentSnapshots -> {
-//                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-//                        System.out.println(document.getId() + " => " + document.getData());
-//                    }
-//                });
-
-//        try {
-//            FileInputStream serviceAccount = new FileInputStream("path/to/serviceAccountKey.json");
-//
-//            FirebaseOptions options = new FirebaseOptions.Builder()
-//                    .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//                    .setDatabaseUrl("https://<DATABASE_NAME>.firebaseio.com")
-//                    .build();
-//
-//            FirebaseApp.initializeApp(options);
-//
-//            FirebaseFirestore db2 = FirestoreOptions.getDefaultInstance().getService();
-//
-//            List<QueryDocumentSnapshot> documents = db2.collection("collectionName").get().get().getDocuments();
-//
-//            for (QueryDocumentSnapshot document : documents) {
-//                System.out.println("Document data: " + document.getData());
-//            }
-//
-//        } catch (Exception e) {
-//            System.out.println("Error reading documents: " + e);
-//        }
-
     }
 }
