@@ -44,8 +44,6 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
         holder.nombre_cliente.setText(perfilesClientes.getNombre());
         holder.apellido_cliente.setText(perfilesClientes.getApellido());
 
-        //Glide.with(holder.itemView.getContext()).load(perfilesClientes.getImagen()).into(holder.imagen_cliente);
-
         final int pos=position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
