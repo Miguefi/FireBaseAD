@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.example.firebasead.database.eventosDatabase.Evento;
 import com.example.firebasead.database.eventosDatabase.Gestor;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -33,6 +35,8 @@ import java.util.Map;
 
 public class EventoDetalle extends AppCompatActivity {
 
+    public static final int CLAVE_MODIFICADO = 56;
+    public static final int CLAVE_ELIMINADO = 57;
     TextView tituloEventoDetalle, inicioEventoDetalle, finEventoDetalle, latitudEventoDetalle, longitudEventoDetalle, descripcionEventoDetalle;
     Button modificarEvento, eliminarEvento;
 
@@ -92,36 +96,32 @@ public class EventoDetalle extends AppCompatActivity {
         //Log.d(TAG, aE.getItemCount()+" items");
         //aL = new AdaptadorListado(perfiles);
 
-        eliminarEvento.setOnClickListener((v) -> {
-            db.collection("Eventos").whereEqualTo("__name__", evento.getId()).limit(1).get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentReference ref = null;
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    ref = document.getReference();
-                                }
+        eliminarEvento.setOnClickListener(v -> {
 
-                                // DELETE
-                                new AlertDialog.Builder(EventoDetalle.this)
-                                        .setTitle("¿Estás seguro de que deseas eliminar el evento?")
-                                        .setMessage("El evento desaparecerá de la base de datos y no podrás recuperarlo")
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(EventoDetalle.this)
+                    .setTitle("¿Estás seguro de que deseas eliminar el evento?")
+                    .setMessage("El evento desaparecerá de la base de datos y no podrás recuperarlo")
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                Toast.makeText(EventoDetalle.this, "Yaay", Toast.LENGTH_SHORT).show();
-                                            }})
-                                        .setNegativeButton(android.R.string.no, null).show();
-                                //assert ref != null;
-                                //ref.delete().addOnSuccessListener(aVoid -> Toast.makeText(EventoDetalle.this, "Evento eliminado!", Toast.LENGTH_LONG).show())
-                                  //      .addOnFailureListener(e -> Toast.makeText(EventoDetalle.this, "Error eliminando evento " + e, Toast.LENGTH_LONG).show());
-                            } else {
-                                Log.w(TAG, "Error select documento.", task.getException());
-                            }
-                        }
-                    });
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Toast.makeText(EventoDetalle.this, "Yaay", Toast.LENGTH_SHORT).show();
+                            DocumentReference ref = db.collection("Eventos").document(evento.getId());
+                            ref.delete()
+                                .addOnSuccessListener((v) -> {
+                                    Toast.makeText(EventoDetalle.this, "Evento eliminado!", Toast.LENGTH_LONG).show();
+                                })
+                                .addOnFailureListener((v) -> {
+                                    Toast.makeText(EventoDetalle.this, "Error eliminando evento! " + v, Toast.LENGTH_LONG).show();
+                                });
+                        }})
+                    .setNegativeButton(android.R.string.no, null).show();
+
+//            Intent intent = new Intent(EventoDetalle.this, EventoMain.class);
+//            setResult(CLAVE_ELIMINADO , intent);
+//            EventoDetalle.super.onBackPressed();
+//            finish();
+
         });
 
         modificarEvento.setOnClickListener((v) -> {
