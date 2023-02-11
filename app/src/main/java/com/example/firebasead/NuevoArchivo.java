@@ -55,6 +55,7 @@ public class NuevoArchivo extends AppCompatActivity {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                     Archivos archivo = new Archivos();
+                    archivo.setId(document.getLong("ID"));
                     archivo.setNombre(document.get("Nombre").toString());
                     archivo.setPropietario(document.get("Propietario").toString());
                     archivo.setDniCliente(document.get("DNI_Cliente").toString());

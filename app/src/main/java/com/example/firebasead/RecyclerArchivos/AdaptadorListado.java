@@ -64,7 +64,6 @@ public class AdaptadorListado extends RecyclerView.Adapter<AdaptadorListado.View
             v.setOnClickListener(this);
         }
 
-
         public void onClick(View view) {
             // Si tengo un manejador de evento lo propago con el índice
             if (clickListener != null) clickListener.onClick(view, listaArchivos.get(getAdapterPosition()));

@@ -46,10 +46,12 @@ public class DescripcionArchivo extends AppCompatActivity {
         extension = findViewById(R.id.idExtensionArchivo);
         fecha = findViewById(R.id.idFechaArchivo);
         borrar = findViewById(R.id.idBorrarArchivo);
-
+        modificar = findViewById(R.id.idModificarArchivo);
         Archivos archivo = (Archivos) getIntent().getSerializableExtra("archivo");
 
         String nombreArchivo = archivo.getNombre();
+        String id = String.valueOf(archivo.getId());
+        Toast.makeText(this, "ESTE ID: "+ id, Toast.LENGTH_SHORT).show();
         nombre.setText("Nombre: " + archivo.getNombre());
         propietario.setText("Propietario: " +archivo.getPropietario());
         dniPropietario.setText("DNI: " +archivo.getDniCliente());
@@ -68,7 +70,6 @@ public class DescripcionArchivo extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             DocumentReference ref = null;
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(ConstraintLayoutStates.TAG, document.getId() + " => " + document.getData());
                                 ref = document.getReference();
                             }
 
@@ -94,6 +95,17 @@ public class DescripcionArchivo extends AppCompatActivity {
                 });
             }
 
+        });
+
+        modificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(DescripcionArchivo.this, ModificarArchivo.class);
+                intent.putExtra("modificarArchivo", archivo);
+                startActivity(intent);
+                finish();
+            }
         });
     }
 }
