@@ -40,7 +40,7 @@ public class EventoMain extends AppCompatActivity {
     AdaptadorEventos aE = new AdaptadorEventos(new ArrayList<>());
     FloatingActionButton anyadirEvento;
     private ArrayList<Evento> eventos = new ArrayList<>();
-    String pattern = "dd-MM HH:mm";
+    String pattern = "dd-MM-yy HH:mm";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
