@@ -49,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
             bundle1.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle1);
             startActivity(intent);
-            finish();
         });
 
         clientes.setOnClickListener(v -> {
@@ -113,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     contraseña = document.get("Contraseña").toString();
                     nombre = document.get("Nombre").toString();
                     apellido = document.get("Apellido").toString();
-                    telefono = document.get("Num_Tel").toString();
+                    telefono = document.get("Num_Telf").toString();
                 }
 
                 Gestor gestorObjeto = new Gestor(dni, contraseña, nombre, apellido, telefono);

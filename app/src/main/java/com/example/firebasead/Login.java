@@ -64,7 +64,7 @@ public class Login extends AppCompatActivity {
                         contraseña = document.get("Contraseña").toString();
                         nombre = document.get("Nombre").toString();
                         apellido = document.get("Apellido").toString();
-                        telefono = document.get("Num_Tel").toString();
+                        telefono = document.get("Num_Telf").toString();
 
                     }
 
