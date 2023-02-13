@@ -22,7 +22,7 @@
             app:srcCompat="@android:drawable/ic_menu_add" />
 
         <SearchView
-            android:id="@+id/buscador"
+            android:id="@+id/buscadorArchivo"
             android:layout_width="236dp"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
@@ -64,7 +64,8 @@
             android:id="@+id/idRecycler"
             android:layout_width="match_parent"
             android:layout_height="590dp"
-            android:paddingTop="8dp">
+            android:paddingTop="8dp"
+            tools:listitem="@layout/caja_archivos">
 
         </androidx.recyclerview.widget.RecyclerView>
 

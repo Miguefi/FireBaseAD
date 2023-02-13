@@ -48,13 +48,12 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/EventoDetallado"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="7dp">
 
         <TextView
-            android:id="@+id/cabeceraEventoDetalle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -134,13 +133,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Modificar Archivo" />
+            android:text="Modificar Archivo"
+            android:layout_margin="7dp"/>
 
         <Button
             android:id="@+id/idBorrarArchivo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_margin="7dp"
             android:text="Borrar Archivo" />
     </LinearLayout>
 

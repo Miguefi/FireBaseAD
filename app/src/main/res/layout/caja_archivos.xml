@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#030537"
     android:orientation="vertical"
-    android:padding="2dp">
+    android:padding="7dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,18 +22,21 @@
 
         <TextView
             android:id="@+id/idNombreArchivo1"
-            android:layout_width="158dp"
+            android:layout_width="118dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="Mod101"
+            android:text="Nombre"
             android:textColor="#FFFFFF"
             android:textSize="24sp" />
 
         <TextView
             android:id="@+id/fechaMod"
-            android:layout_width="33dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_weight="3" />
+            android:gravity="center_vertical"
+            android:text="Fecha"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"/>
 
     </LinearLayout>
 </LinearLayout>

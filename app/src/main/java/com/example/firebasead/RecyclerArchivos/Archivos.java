@@ -1,40 +1,24 @@
 package com.example.firebasead.RecyclerArchivos;
-
-import com.google.firebase.Timestamp;
-
 import java.io.Serializable;
-import java.util.Date;
 
 public class Archivos implements Serializable {
 
-    public String id;
-
+    public long id;
     public String nombre;
     public String propietario;
     public String extension;
     public String dniCliente;
     public String fechaCreacion;
 
+    public Archivos() {}
 
-    public Archivos() {
-    }
-
-    public Archivos(String s_nombre, String s_propietario, String s_dni, String s_fecha, String s_extension) {
-        this.nombre = s_nombre;
-        this.propietario = s_propietario;
-        this.extension = s_dni;
-        this.dniCliente = s_fecha;
-        this.fechaCreacion = s_extension;
-    }
-
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
-
 
     public String getNombre() {
         return nombre;
