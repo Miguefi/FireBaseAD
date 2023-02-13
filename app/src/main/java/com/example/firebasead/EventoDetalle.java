@@ -5,96 +5,95 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.firebasead.database.eventosDatabase.Evento;
-import com.example.firebasead.database.eventosDatabase.Gestor;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Date;
 
 public class EventoDetalle extends AppCompatActivity {
 
     public static final int CLAVE_MODIFICADO = 56;
     public static final int CLAVE_ELIMINADO = 57;
-    TextView tituloEventoDetalle, inicioEventoDetalle, finEventoDetalle, latitudEventoDetalle, longitudEventoDetalle, descripcionEventoDetalle;
+    EditText tituloEventoDetalle, fechaInicioEventoDetalle, fechaFinEventoDetalle;
+    EditText horaInicioEventoDetalle, horaFinEventoDetalle, latitudEventoDetalle;
+    EditText longitudEventoDetalle, descripcionEventoDetalle;
     Button modificarEvento, eliminarEvento;
+    ImageView editarTitulo, editarFechaInicio, editarFechaFin, editarHoraInicio, editarHoraFin;
+    ImageView editarLatitud, editarLongitud, editarDescripcion;
 
-    String pattern = "dd-MM HH:mm";
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    String patternFecha = "dd-MM-yy";
+    String patternHora = "HH:mm";
+    SimpleDateFormat simpleDateFormatFecha = new SimpleDateFormat(patternFecha);
+    SimpleDateFormat simpleDateFormatHora = new SimpleDateFormat(patternHora);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_evento_detalle);
 
-        tituloEventoDetalle = findViewById(R.id.tituloEventoDetalle);
-        inicioEventoDetalle = findViewById(R.id.inicioEventoDetalle);
-        finEventoDetalle = findViewById(R.id.finEventoDetalle);
-        latitudEventoDetalle = findViewById(R.id.latitudEventoDetalle);
-        longitudEventoDetalle = findViewById(R.id.longitudEventoDetalle);
-        descripcionEventoDetalle = findViewById(R.id.descripcionEventoDetalle);
+        tituloEventoDetalle = findViewById(R.id.tituloEditableEventoDetalle);
+        fechaInicioEventoDetalle = findViewById(R.id.fechaInicioEditableEventoDetalle);
+        horaInicioEventoDetalle = findViewById(R.id.horaInicioEditableEventoDetalle);
+        fechaFinEventoDetalle = findViewById(R.id.fechaFinEditableEventoDetalle);
+        horaFinEventoDetalle = findViewById(R.id.horaFinEditableEventoDetalle);
+        latitudEventoDetalle = findViewById(R.id.latitudEditableEventoDetalle);
+        longitudEventoDetalle = findViewById(R.id.longitudEditableEventoDetalle);
+        descripcionEventoDetalle = findViewById(R.id.descripcionEditableEventoDetalle);
+
+        editarTitulo = findViewById(R.id.editTitulo);
+        editarFechaInicio = findViewById(R.id.editFechaInicio);
+        editarFechaFin = findViewById(R.id.editFechaFin);
+        editarHoraInicio = findViewById(R.id.editHoraInicio);
+        editarHoraFin = findViewById(R.id.editHoraFin);
+        editarLatitud = findViewById(R.id.editLatitud);
+        editarLongitud = findViewById(R.id.editLongitud);
+        editarDescripcion = findViewById(R.id.editDescripcion);
 
         modificarEvento = findViewById(R.id.modificarEvento);
         eliminarEvento = findViewById(R.id.eliminarEvento);
 
+        ManejadorFechas manejadorFechaInicio = new ManejadorFechas(fechaInicioEventoDetalle);
+        ManejadorFechas manejadorFechaFin = new ManejadorFechas(fechaFinEventoDetalle);
+
+        fechaInicioEventoDetalle.setOnClickListener(manejadorFechaInicio);
+        fechaFinEventoDetalle.setOnClickListener(manejadorFechaFin);
+
+        ManejadorHoras manejadorHoraInicio = new ManejadorHoras(horaInicioEventoDetalle);
+        ManejadorHoras manejadorHoraFin = new ManejadorHoras(horaFinEventoDetalle);
+
+        horaInicioEventoDetalle.setOnClickListener(manejadorHoraInicio);
+        horaFinEventoDetalle.setOnClickListener(manejadorHoraFin);
+
         Evento evento = (Evento) getIntent().getSerializableExtra("Evento");
 
-//        tituloEventoDetalle.setText(evento.getTitulo());
-//        inicioEventoDetalle.setText(evento.getInicio());
-//        finEventoDetalle.setText(evento.getFin().toString());
-//        latitudEventoDetalle.setText(evento.getLatitud() + "");
-//        longitudEventoDetalle.setText(evento.getLongitud() + "");
-//        descripcionEventoDetalle.setText(evento.getDescripcion());
-
-        Log.d(TAG, evento.getId());
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Eventos").whereEqualTo("__name__", evento.getId()).limit(1).get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                Timestamp timestampInicio = (Timestamp) document.get("Inicio");
-                                Timestamp timestampFin = (Timestamp) document.get("Fin");
-                                tituloEventoDetalle.setText(tituloEventoDetalle.getText() + " " + document.get("Titulo").toString());
-                                inicioEventoDetalle.setText(inicioEventoDetalle.getText() + " " + simpleDateFormat.format(timestampInicio.toDate()));
-                                finEventoDetalle.setText(finEventoDetalle.getText() + " " + simpleDateFormat.format(timestampFin.toDate()));
-                                latitudEventoDetalle.setText(latitudEventoDetalle.getText() + " " + document.get("Latitud").toString());
-                                longitudEventoDetalle.setText(longitudEventoDetalle.getText() + " " + document.get("Longitud").toString());
-                                descripcionEventoDetalle.setText(descripcionEventoDetalle.getText() + " " + document.get("Descripcion").toString());
-                                //Log.d(TAG, evento.getTitulo()+" " +evento.getInicio());
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-        //Log.d(TAG, aE.getItemCount()+" items");
-        //aL = new AdaptadorListado(perfiles);
+
+        selectEvento(db , evento.getId());
 
         eliminarEvento.setOnClickListener(v -> {
 
@@ -105,63 +104,261 @@ public class EventoDetalle extends AppCompatActivity {
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            Toast.makeText(EventoDetalle.this, "Yaay", Toast.LENGTH_SHORT).show();
                             DocumentReference ref = db.collection("Eventos").document(evento.getId());
                             ref.delete()
                                 .addOnSuccessListener((v) -> {
-                                    Toast.makeText(EventoDetalle.this, "Evento eliminado!", Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Evento eliminado!");
+                                    volverEventoMain(CLAVE_ELIMINADO);
                                 })
                                 .addOnFailureListener((v) -> {
-                                    Toast.makeText(EventoDetalle.this, "Error eliminando evento! " + v, Toast.LENGTH_LONG).show();
+                                    Log.d(TAG, "Error eliminando evento");
                                 });
                         }})
-                    .setNegativeButton(android.R.string.no, null).show();
-
-//            Intent intent = new Intent(EventoDetalle.this, EventoMain.class);
-//            setResult(CLAVE_ELIMINADO , intent);
-//            EventoDetalle.super.onBackPressed();
-//            finish();
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d(TAG, "Eliminación de evento cancelada");
+                        }
+                    }).show();
 
         });
 
         modificarEvento.setOnClickListener((v) -> {
-            db.collection("Eventos").whereEqualTo("__name__", evento.getId()).limit(1).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentReference docRef = null;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
 
-                        // UPDATE
-                        DocumentReference ref = document.getReference();
-//                        ref.update("Nombre", nom);
-//                        ref.update("Apellido", ape);
-//                        ref.update("Contraseña", con);
-//                        ref.update("Num_Telf", tel);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yy HH:mm");
+            String stringDateInicio = getEditTextText(fechaInicioEventoDetalle.getText().toString()) + " " + getEditTextText(horaInicioEventoDetalle.getText().toString());
+            String stringDateFin = getEditTextText(fechaFinEventoDetalle.getText().toString()) + " " + getEditTextText(horaFinEventoDetalle.getText().toString());
+            Date dateInicio = null;
+            Date dateFin = null;
 
-                        docRef = ref;
+            try {
+                dateInicio = simpleDateFormat.parse(stringDateInicio);
+                dateFin = simpleDateFormat.parse(stringDateFin);
+            } catch (ParseException e) {
+                Log.d(TAG, e.toString());
+            }
 
-                    }
+            Timestamp timeStampInicio = new Timestamp(dateInicio);
+            Timestamp timeStampFin = new Timestamp(dateFin);
 
-                    //Gestor gestorObjeto = new Gestor(s_dni, con, nom, ape, tel);
+            // UPDATE
+            DocumentReference ref = db.collection("Eventos").document(evento.getId());
+            ref.update("Titulo", getEditTextText(tituloEventoDetalle.getText().toString()));
+            ref.update("Inicio", timeStampInicio);
+            ref.update("Fin", timeStampFin);
+            ref.update("Latitud", Float.valueOf(getEditTextText(latitudEventoDetalle.getText().toString())));
+            ref.update("Longitud", Float.valueOf(getEditTextText(longitudEventoDetalle.getText().toString())));
+            ref.update("Descripcion", getEditTextText(descripcionEventoDetalle.getText().toString()));
 
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("timestamp", FieldValue.serverTimestamp());
+            Toast.makeText(this, "Evento con Id " + evento.getId() + " modificado", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "Evento con Id " + evento.getId() + " modificado");
 
-                    // ESPERAR A UNA RESPUESTA DEL SERVIDOR, ACTUALIZACIONES COMPLETADAS
-                    assert docRef != null;
-                    docRef.update(updates).addOnCompleteListener(task1 -> {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle1 = new Bundle();
-                        //bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
-                        intent.putExtras(bundle1);
-                        startActivity(intent);
-                    });
-
-                } else {
-                    Log.w(TAG, "Error select documento.", task.getException());
-                }
-            });
+            volverEventoMain(CLAVE_MODIFICADO);
 
         });
+
+        ManejadorClickEdit manejadorClickEditTitulo = new ManejadorClickEdit(
+                tituloEventoDetalle, editarTitulo, getDecorador(tituloEventoDetalle.getText().toString())
+        );
+
+        ManejadorClickEdit manejadorClickEditLatitud = new ManejadorClickEdit(
+                latitudEventoDetalle, editarLatitud, getDecorador(latitudEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditLongitud = new ManejadorClickEdit(
+                longitudEventoDetalle, editarLongitud, getDecorador(longitudEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditDescripcion = new ManejadorClickEdit(
+                descripcionEventoDetalle, editarDescripcion, getDecorador(descripcionEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditFechaInicio = new ManejadorClickEdit(
+                fechaInicioEventoDetalle, editarFechaInicio, getDecorador(fechaInicioEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditFechaFin = new ManejadorClickEdit(
+                fechaFinEventoDetalle, editarFechaFin, getDecorador(fechaFinEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditHoraInicio = new ManejadorClickEdit(
+                horaInicioEventoDetalle, editarHoraInicio, getDecorador(horaInicioEventoDetalle.getText().toString())
+        );
+        ManejadorClickEdit manejadorClickEditHoraFin = new ManejadorClickEdit(
+                horaFinEventoDetalle, editarHoraFin, getDecorador(horaFinEventoDetalle.getText().toString())
+        );
+
+        editarTitulo.setOnClickListener(manejadorClickEditTitulo);
+        editarLatitud.setOnClickListener(manejadorClickEditLatitud);
+        editarLongitud.setOnClickListener(manejadorClickEditLongitud);
+        editarDescripcion.setOnClickListener(manejadorClickEditDescripcion);
+        editarFechaInicio.setOnClickListener(manejadorClickEditFechaInicio);
+        editarFechaFin.setOnClickListener(manejadorClickEditFechaFin);
+        editarHoraInicio.setOnClickListener(manejadorClickEditHoraInicio);
+        editarHoraFin.setOnClickListener(manejadorClickEditHoraFin);
+
+    }
+
+    public String getEditTextText (String texto) {
+
+        return texto.substring(texto.indexOf(": ") + 2);
+
+    }
+
+    public String getDecorador (String texto) {
+
+        return texto.substring(0, texto.indexOf(": ") + 2);
+
+    }
+
+    public void selectEvento (FirebaseFirestore db, String id) {
+
+        db.collection("Eventos").whereEqualTo("__name__", id).limit(1).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            rellenarEditTexts(task);
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public void volverEventoMain (int clave) {
+
+        Intent intent = new Intent(EventoDetalle.this, EventoMain.class);
+        setResult(clave , intent);
+        EventoDetalle.super.onBackPressed();
+        finish();
+
+    }
+
+    public void rellenarEditTexts(Task<QuerySnapshot> task) {
+
+        for (QueryDocumentSnapshot document : task.getResult()) {
+            Log.d(TAG, document.getId() + " => " + document.getData());
+            Timestamp timestampInicio = (Timestamp) document.get("Inicio");
+            Timestamp timestampFin = (Timestamp) document.get("Fin");
+            tituloEventoDetalle.setText(tituloEventoDetalle.getText() + document.get("Titulo").toString());
+            fechaInicioEventoDetalle.setText(fechaInicioEventoDetalle.getText() + " " + simpleDateFormatFecha.format(timestampInicio.toDate()));
+            horaInicioEventoDetalle.setText(horaInicioEventoDetalle.getText() + " " + simpleDateFormatHora.format(timestampInicio.toDate()));
+            fechaFinEventoDetalle.setText(fechaFinEventoDetalle.getText() + " " + simpleDateFormatFecha.format(timestampFin.toDate()));
+            horaFinEventoDetalle.setText(horaFinEventoDetalle.getText() + " " + simpleDateFormatHora.format(timestampFin.toDate()));
+            latitudEventoDetalle.setText(latitudEventoDetalle.getText() + " " + document.get("Latitud").toString());
+            longitudEventoDetalle.setText(longitudEventoDetalle.getText() + " " + document.get("Longitud").toString());
+            descripcionEventoDetalle.setText(descripcionEventoDetalle.getText() + document.get("Descripcion").toString());
+        }
+
+    }
+
+    public class ManejadorClickEdit implements View.OnClickListener {
+
+        EditText editText;
+        ImageView icono;
+        boolean editable = true;
+        String decorador;
+
+        ManejadorClickEdit(){
+
+        }
+
+        ManejadorClickEdit(EditText editText, ImageView icono, String decorador){
+            this.editText = editText;
+            this.icono = icono;
+            this.decorador = decorador;
+        }
+
+        @Override
+        public void onClick(View v) {
+            String texto = editText.getText().toString();
+            if (editable) {
+                editText.setText("");
+                editText.setEnabled(true);
+                icono.setImageResource(R.drawable.zic_check_vector);
+                editable = false;
+            } else {
+                editText.setText(decorador + texto);
+                editText.setEnabled(false);
+                icono.setImageResource(android.R.drawable.ic_menu_edit);
+                editable = true;
+            }
+        }
+    }
+
+    public class ManejadorFechas implements View.OnClickListener {
+
+        EditText fecha;
+
+        public ManejadorFechas() {
+
+        }
+
+        public ManejadorFechas(EditText fecha) {
+            this.fecha = fecha;
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.fechaInicioEditableEventoDetalle:
+                    showDatePickerDialog(fechaInicioEventoDetalle);
+                    break;
+
+                case R.id.fechaFinEditableEventoDetalle:
+                    showDatePickerDialog(fechaFinEventoDetalle);
+                    break;
+            }
+        }
+
+    }
+
+    public class ManejadorHoras implements View.OnClickListener {
+
+        EditText hora;
+
+        public ManejadorHoras() {
+
+        }
+
+        public ManejadorHoras(EditText hora) {
+            this.hora = hora;
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()) {
+                case R.id.horaInicioEditableEventoDetalle:
+                    showTimePickerDialog(horaInicioEventoDetalle);
+                    break;
+
+                case R.id.horaFinEditableEventoDetalle:
+                    showTimePickerDialog(horaFinEventoDetalle);
+                    break;
+            }
+        }
+    }
+
+    private void showDatePickerDialog(final EditText fecha) {
+        DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                // +1 because January is zero
+                final String selectedDate = day + "-" + (month+1) + "-" + year;
+                fecha.setText(selectedDate);
+            }
+        });
+
+        newFragment.show(getSupportFragmentManager(), "datePicker");
+    }
+
+    private void showTimePickerDialog(final EditText hora) {
+        TimePickerFragment newFragment = TimePickerFragment.newInstance(new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                // +1 because January is zero
+                final String selectedHour = hourOfDay + ":" + minute;
+                hora.setText(selectedHour);
+            }
+        });
+
+        newFragment.show(getSupportFragmentManager(), "timePicker");
     }
 }
