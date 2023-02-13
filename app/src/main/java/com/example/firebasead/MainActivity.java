@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
             bundle12.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle12);
             startActivity(intent);
-            finish();
 
         });
 
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             bundle14.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle14);
             startActivity(intent);
-            finish();
 
         });
 
