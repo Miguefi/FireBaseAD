@@ -26,15 +26,9 @@ public class AdaptadorEventos extends RecyclerView.Adapter<AdaptadorEventos.View
         this.clickListener = itemClickListener;
     }
 
-    public interface RecyclerViewClickListener {
-        void onClick(View v, int position);
-    }
-
-    private RecyclerViewClickListener listener;
-
     public AdaptadorEventos(ArrayList<Evento> dataSet) {
         eventosList = dataSet;
-        this.listener = listener;
+        this.clickListener = clickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

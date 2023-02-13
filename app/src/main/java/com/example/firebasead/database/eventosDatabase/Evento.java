@@ -3,7 +3,6 @@ package com.example.firebasead.database.eventosDatabase;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
-//import java.sql.Timestamp;
 
 public class Evento implements Serializable {
 
@@ -23,13 +22,17 @@ public class Evento implements Serializable {
     public Evento(){
     }
 
-    public Evento(String titulo, String inicio, String fin, float latitud, float longitud, String descripcion){
-        titulo = this.titulo;
-        inicio = this.fechaInicio;
-        fin = this.fechaFin;
-        latitud = this.latitud;
-        longitud = this.longitud;
-        descripcion = this.descripcion;
+    public Evento(String titulo, String fechaInicio, String fechaFin, String horaInicio,
+                  String horaFin, float latitud, float longitud, String descripcion){
+        this.titulo = titulo;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.latitud = latitud;
+        this.longitud = longitud;
+        this.descripcion = descripcion;
+
     }
 
     public String getId() {

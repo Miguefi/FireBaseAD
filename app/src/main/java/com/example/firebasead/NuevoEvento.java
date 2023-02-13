@@ -67,46 +67,15 @@ public class NuevoEvento extends AppCompatActivity {
         horaFin.setOnClickListener(manejadorHoraVuelta);
 
         crearEvento.setOnClickListener(new View.OnClickListener() {
+
            @Override
            public void onClick(View v) {
 
-               String s_titulo = titulo.getText().toString(), s_descripcion = descripcion.getText().toString();
-               SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
-               String stringDateInicio = fechaInicio.getText().toString() + " " + horaInicio.getText().toString();
-               String stringDateFin = fechaFin.getText().toString() + " " + horaFin.getText().toString();
-               Date dateInicio = null;
-               Date dateFin = null;
-
-               try {
-                   dateInicio = simpleDateFormat.parse(stringDateInicio);
-                   dateFin = simpleDateFormat.parse(stringDateFin);
-               } catch (ParseException e) {
-                   Log.d(TAG, e.toString());
-               }
-
-               Timestamp timeStampInicio = new Timestamp(dateInicio);
-               Timestamp timeStampFin = new Timestamp(dateFin);
-               Float s_latitud = Float.valueOf(latitud.getText().toString()), s_longitud = Float.valueOf(longitud.getText().toString());
-
-               Map<String, Object> evento = new HashMap<>();
-               evento.put("Titulo", s_titulo);
-               evento.put("Inicio", timeStampInicio);
-               evento.put("Fin", timeStampFin);
-               evento.put("Latitud", s_latitud);
-               evento.put("Longitud", s_longitud);
-               evento.put("Descripcion", s_descripcion);
-
+               Map<String, Object> evento = prepararEvento();
 
                db.collection("Eventos").add(evento).addOnSuccessListener(documentReference -> {
                            Log.d(TAG, "Insertado evento con ID: " + documentReference.getId());
 
-                           //Evento eventoObject = new Evento(s_titulo, s_inicio, s_fin, s_latitud, s_longitud, s_descripcion);
-//
-//                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//                        Bundle bundle = new Bundle();
-//                        bundle.putSerializable("Evento", (Serializable) eventoObject);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
                        })
                        .addOnFailureListener(e -> Log.w(TAG, "Error insertando evento", e));
 
@@ -145,6 +114,7 @@ public class NuevoEvento extends AppCompatActivity {
                     break;
             }
         }
+
     }
 
     public class ManejadorHoras implements View.OnClickListener {
@@ -173,33 +143,6 @@ public class NuevoEvento extends AppCompatActivity {
         }
     }
 
-    public static class DatePickerFragment extends DialogFragment {
-
-        private DatePickerDialog.OnDateSetListener listener;
-
-        public static DatePickerFragment newInstance(DatePickerDialog.OnDateSetListener listener) {
-            DatePickerFragment fragment = new DatePickerFragment();
-            fragment.setListener(listener);
-            return fragment;
-        }
-
-        public void setListener(DatePickerDialog.OnDateSetListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int year = c.get(Calendar.YEAR);
-            int month = c.get(Calendar.MONTH);
-            int day = c.get(Calendar.DAY_OF_MONTH);
-
-            return new DatePickerDialog(getActivity(), listener, year, month, day);
-        }
-
-    }
-
     private void showDatePickerDialog(final EditText fecha) {
         DatePickerFragment newFragment = DatePickerFragment.newInstance(new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -213,35 +156,6 @@ public class NuevoEvento extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "datePicker");
     }
 
-    public static class TimePickerFragment extends DialogFragment {
-
-        private TimePickerDialog.OnTimeSetListener listener;
-
-        public static TimePickerFragment newInstance(TimePickerDialog.OnTimeSetListener listener) {
-            TimePickerFragment fragment = new TimePickerFragment();
-            fragment.setListener(listener);
-            return fragment;
-        }
-
-        public void setListener(TimePickerDialog.OnTimeSetListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        @NonNull
-        public Dialog onCreateDialog(Bundle savedInstanceState) {
-            final Calendar c = Calendar.getInstance();
-            int hour = c.get(Calendar.HOUR_OF_DAY);
-            int minute = c.get(Calendar.MINUTE);
-
-            // Create a new instance of TimePickerDialog and return it
-            return new TimePickerDialog(getActivity(), listener, hour, minute,
-                    DateFormat.is24HourFormat(getActivity()));
-
-        }
-
-    }
-
     private void showTimePickerDialog(final EditText hora) {
         TimePickerFragment newFragment = TimePickerFragment.newInstance(new TimePickerDialog.OnTimeSetListener() {
             @Override
@@ -253,5 +167,39 @@ public class NuevoEvento extends AppCompatActivity {
         });
 
         newFragment.show(getSupportFragmentManager(), "timePicker");
+    }
+
+    public Map<String, Object> prepararEvento () {
+
+        String s_titulo = titulo.getText().toString(), s_descripcion = descripcion.getText().toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+        String stringDateInicio = fechaInicio.getText().toString() + " " + horaInicio.getText().toString();
+        String stringDateFin = fechaFin.getText().toString() + " " + horaFin.getText().toString();
+        Date dateInicio = null;
+        Date dateFin = null;
+
+        try {
+            dateInicio = simpleDateFormat.parse(stringDateInicio);
+            dateFin = simpleDateFormat.parse(stringDateFin);
+        } catch (ParseException e) {
+            Log.d(TAG, e.toString());
+        }
+
+        Timestamp timeStampInicio = new Timestamp(dateInicio);
+        Timestamp timeStampFin = new Timestamp(dateFin);
+        Float s_latitud = Float.valueOf(latitud.getText().toString());
+        Float s_longitud = Float.valueOf(longitud.getText().toString());
+
+        Map<String, Object> evento = new HashMap<>();
+
+        evento.put("Titulo", s_titulo);
+        evento.put("Inicio", timeStampInicio);
+        evento.put("Fin", timeStampFin);
+        evento.put("Latitud", s_latitud);
+        evento.put("Longitud", s_longitud);
+        evento.put("Descripcion", s_descripcion);
+
+        return evento;
+
     }
 }

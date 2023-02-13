@@ -34,14 +34,13 @@ import java.util.ArrayList;
 
 public class EventoMain extends AppCompatActivity {
 
-    public static final int NUMERO_PERFILES = 5;
     private static final int CLAVE_LISTA = 55;
-    private static final int CLAVE_AÑADIR = 56;
+    private static final int CLAVE_AÑADIR = 50;
     RecyclerView RVEventos;
     AdaptadorEventos aE = new AdaptadorEventos(new ArrayList<>());
     FloatingActionButton anyadirEvento;
     private ArrayList<Evento> eventos = new ArrayList<>();
-    String pattern = "dd-MM HH:mm";
+    String pattern = "dd-MM-yy HH:mm";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
 
@@ -63,18 +62,18 @@ public class EventoMain extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(EventoMain.this, NuevoEvento.class);
                 intent.putExtra("Añadir", CLAVE_AÑADIR);
-                controladorGestor.launch(intent);
+                controladorEventos.launch(intent);
             }
         });
 
     }
 
-    ActivityResultLauncher controladorGestor = registerForActivityResult(
+    ActivityResultLauncher controladorEventos = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(), result -> {
-                //Log.d(TAG, "Vuelve cancelado");
                 int code = result.getResultCode();
                 switch (code) {
                     case RESULT_CANCELED:
+                        Log.d(TAG, "Vuelve cancelado");
                         break;
                     case NuevoEvento.CLAVE_INSERTADO:
                         Log.d(TAG, "EVENTO INSERTADO");
@@ -93,45 +92,40 @@ public class EventoMain extends AppCompatActivity {
 
                 }
 
-            });
+            }
+    );
 
     public void poblarRecyclerView() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Eventos")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            eventos = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                //Log.d(TAG, document.getId() + " => " + document.getData());
-                                DocumentReference ref = document.getReference();
-                                Evento evento = new Evento();
-                                Timestamp timestamp = (Timestamp) document.get("Inicio");
-                                evento.setId(document.getId());
-                                evento.setTitulo(document.get("Titulo").toString());
-                                evento.setFechaInicio(simpleDateFormat.format(timestamp.toDate()));
-                                eventos.add(evento);
-                                //Log.d(TAG, evento.getTitulo()+" " +evento.getFechaInicio()+" "+evento.getId());
-                            }
-                            //Log.d(TAG,eventos.get(0).getTitulo()+ " " + eventos.get(0).getInicio());
-                            aE = new AdaptadorEventos(eventos);
-                            RVEventos.setAdapter(aE);
-                            aE.setClickListener(new AdaptadorEventos.ItemClickListener() {
-                                @Override
-                                public void onClick(View view, int position, Evento evento) {
-                                    Intent intent = new Intent(EventoMain.this, com.example.firebasead.EventoDetalle.class);
-                                    intent.putExtra("Detalle", CLAVE_LISTA);
-                                    intent.putExtra("Evento" , evento);
-                                    startActivity(intent);
-                                    Toast.makeText(EventoMain.this, "Estoy pinchando", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
+        db.collection("Eventos").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    eventos = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        DocumentReference ref = document.getReference();
+                        Evento evento = new Evento();
+                        Timestamp timestamp = (Timestamp) document.get("Inicio");
+                        evento.setId(document.getId());
+                        evento.setTitulo(document.get("Titulo").toString());
+                        evento.setFechaInicio(simpleDateFormat.format(timestamp.toDate()));
+                        eventos.add(evento);
                     }
-                });
+                    aE = new AdaptadorEventos(eventos);
+                    RVEventos.setAdapter(aE);
+                    aE.setClickListener(new AdaptadorEventos.ItemClickListener() {
+                        @Override
+                        public void onClick(View view, int position, Evento evento) {
+                            Intent intent = new Intent(EventoMain.this, com.example.firebasead.EventoDetalle.class);
+                            intent.putExtra("Detalle", CLAVE_LISTA);
+                            intent.putExtra("Evento" , evento);
+                            controladorEventos.launch(intent);
+                        }
+                    });
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
     }
 }
