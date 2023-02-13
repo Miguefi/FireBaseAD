@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         clientes.setOnClickListener(v -> {
             actualizarDatosGestor();
-            Intent intent = new Intent(getApplicationContext(), GestorMain.class);
+            Intent intent = new Intent(getApplicationContext(), ClienteMain.class);
             Bundle bundle12 = new Bundle();
             bundle12.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle12);

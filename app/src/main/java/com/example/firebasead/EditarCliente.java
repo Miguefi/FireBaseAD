@@ -5,18 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.firebasead.Recycler.Cliente;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,10 +24,10 @@ import java.util.Map;
 public class EditarCliente extends AppCompatActivity {
 
 
-    TextView nombre, apellido, dniCliente, dniGestor, telefono, contraseña;
-
-    Button actualizar;
-    FirebaseFirestore db;
+    private Button actualizar;
+    private EditText nombre, apellido, dniGestor, telefono, contraseña;
+    private TextView dniCliente;
+    private FirebaseFirestore db;
 
 
     @Override
@@ -37,7 +37,6 @@ public class EditarCliente extends AppCompatActivity {
 
 
         actualizar = findViewById(R.id.boton_actualizar_cliente);
-        db = FirebaseFirestore.getInstance();
         nombre = findViewById(R.id.nombreActualizar);
         apellido = findViewById(R.id.apellidActualizar);
         dniCliente = findViewById(R.id.dni_actualizar);
@@ -46,15 +45,24 @@ public class EditarCliente extends AppCompatActivity {
         telefono = findViewById(R.id.telefonoActualizar);
 
 
-        String dni_intent = getIntent().getStringExtra("dni");
+
+        db = FirebaseFirestore.getInstance();
+        Cliente perfil = (Cliente) getIntent().getSerializableExtra("perfil");
+        nombre.setText(perfil.getNombre());
+        apellido.setText( perfil.getApellido());
+        dniCliente.setText(perfil.getDni_cliente());
+        dniGestor.setText(perfil.getDni_gestor());
+        contraseña.setText(perfil.getContraseña());
+        telefono.setText( perfil.getTel());
+
+
 
 
         actualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                db.collection("Clientes").whereEqualTo("DNI", dni_intent).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                db.collection("Clientes").whereEqualTo("DNI", perfil.getDni_cliente()).get().
+                        addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                         if (!queryDocumentSnapshots.isEmpty()) {
@@ -62,24 +70,27 @@ public class EditarCliente extends AppCompatActivity {
                             String s_nombre = nombre.getText().toString();
                             String s_apellido = apellido.getText().toString();
                             String s_dniGestor = dniGestor.getText().toString();
-                            dniCliente.setText(dni_intent);
                             String s_contraseña = contraseña.getText().toString();
+                            String s_dniCliente=dniCliente.getText().toString();
                             String s_telefono = telefono.getText().toString();
                             DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
                             // Obtener el ID único del documento
                             String id = documentSnapshot.getId();
-                            Map<String, Object> evento = new HashMap<>();
-                            evento.put("Nombre", s_nombre);
-                            evento.put("Apellido", s_apellido);
-                            evento.put("DNI", dni_intent);
-                            evento.put("DNI_Gestor", s_dniGestor);
-                            evento.put("Num_Tel", s_telefono);
-                            evento.put("Contraseña", s_contraseña);
+                            Map<String, Object> modificado = new HashMap<>();
+                            modificado.put("Nombre", s_nombre);
+                            modificado.put("Apellido", s_apellido);
+                            modificado.put("DNI", s_dniCliente);
+                            modificado.put("DNI_Gestor", s_dniGestor);
+                            modificado.put("Num_Tel", s_telefono);
+                            modificado.put("Contraseña", s_contraseña);
 
-                            db.collection("Clientes").document(id).set(evento, SetOptions.merge());
+                            db.collection("Clientes").document(id).set(modificado, SetOptions.merge());
+
                             Toast.makeText(EditarCliente.this, "Datos del cliente actualizados", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(EditarCliente.this, GestorMain.class));
+                            Intent intent = new Intent(EditarCliente.this, ClienteMain.class);
+                            startActivity(intent);
                             finish();
+
                         }
                     }
                 });

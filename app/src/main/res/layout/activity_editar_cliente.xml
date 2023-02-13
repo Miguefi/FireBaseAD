@@ -7,60 +7,11 @@
     tools:context=".EditarCliente">
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <LinearLayout
-        android:id="@+id/EventoDetalle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/gradient"
-        android:orientation="vertical"
-        android:textAlignment="center" >
-
-        <LinearLayout
-            android:id="@+id/Cabezera"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/alto_boton"
-            android:background="@color/earlie_black"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
-
-            <ImageView
-                android:id="@+id/menu"
-                android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                app:srcCompat="@drawable/dots" />
-
-            <SearchView
-                android:id="@+id/buscador"
-                android:layout_width="236dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/borde_encabezado"
-                android:searchIcon="@drawable/ic_search">
-
-            </SearchView>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-
-                android:id="@+id/imagenCajaCliente"
-                android:layout_width="33dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@drawable/pexels_polina_kovaleva_5927743"
-                tools:srcCompat="@tools:sample/avatars" />
-
-        </LinearLayout>
-
         <LinearLayout
             android:id="@+id/EventoDetallado"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/gradient"
             android:orientation="vertical">
 
             <TextView
@@ -199,17 +150,10 @@
                     android:id="@+id/boton_actualizar_cliente"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="145dp"
-                    android:text="Actualizar"
-                    />
+                    android:layout_gravity="end"
+                    android:text="Actualizar Cliente" />
             </LinearLayout>
 
-
         </LinearLayout>
-
-    </LinearLayout>
-
-    </ScrollView>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

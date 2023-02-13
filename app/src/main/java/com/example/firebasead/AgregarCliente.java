@@ -1,6 +1,6 @@
 package com.example.firebasead;
 
-import androidx.annotation.NonNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -8,14 +8,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
-
-import com.example.firebasead.Recycler.PerfilesClientes;
-import com.example.firebasead.RecyclerArchivos.Archivos;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
+import android.widget.Toast;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +18,7 @@ public class AgregarCliente extends AppCompatActivity {
 
     private TextView nombre, apellido, dniCliente, dniGestor, contraseña,telefono;
     private Button agregar;
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,36 +34,34 @@ public class AgregarCliente extends AppCompatActivity {
         agregar = findViewById(R.id.crearCliente);
 
 
-        agregar.setOnClickListener(v -> {
-            String s_nombre = nombre.getText().toString(), s_apellido = apellido.getText().toString(),
-                    s_dniCliente = dniCliente.getText().toString(), s_dniGestor = dniGestor.getText().toString(),
-                    s_contraseña = contraseña.getText().toString(),s_telefono = telefono.getText().toString();
-
-            Map<String, Object> evento = new HashMap<>();
-            evento.put("Nombre", s_nombre);
-            evento.put("Apellido", s_apellido);
-            evento.put("DNI", s_dniCliente);
-            evento.put("DNI_Gestor", s_dniGestor);
-            evento.put("Num_Tel", s_telefono);
-            evento.put("Contraseña", s_contraseña);
-
-
-            db.collection("Clientes").add(evento)
-                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            String id = documentReference.getId();
-                            Log.d("TAG", "DocumentSnapshot added with ID: " + id);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("TAG", "Error adding document", e);
-                        }
-                    });
-        });
-
+        agregar.setOnClickListener(v -> addCliente());
 
     }
+
+    private void addCliente() {
+        String s_nombre = nombre.getText().toString();
+        String s_apellido = apellido.getText().toString();
+        String s_dniCliente = dniCliente.getText().toString();
+        String s_dniGestor = dniGestor.getText().toString();
+        String s_contraseña = contraseña.getText().toString();
+        String s_telefono = telefono.getText().toString();
+
+        Map<String, Object> cliente = new HashMap<>();
+        cliente.put("Nombre", s_nombre);
+        cliente.put("Apellido", s_apellido);
+        cliente.put("DNI", s_dniCliente);
+        cliente.put("DNI_Gestor", s_dniGestor);
+        cliente.put("Num_Tel", s_telefono);
+        cliente.put("Contraseña", s_contraseña);
+
+        db.collection("Clientes").add(cliente)
+                .addOnSuccessListener(documentReference -> {
+                    startActivity(new Intent(AgregarCliente.this, ClienteMain.class));
+                    finish();
+                    Toast.makeText(this, "Añadido cliente " + s_nombre, Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> Log.w("TAG", "Error adding document", e));
+    }
+
+
 }
