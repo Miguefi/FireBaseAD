@@ -39,9 +39,10 @@ public class EditarGestor extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             gestorObject = (Gestor) bundle.getSerializable("Gestor");
-        } else { // SI BUNDLE ES NULO, NO ESTA LOGEADO
-            finish();
         }
+//        else { // SI BUNDLE ES NULO, NO ESTA LOGEADO
+//            finish();
+//        }
 
         setContentView(R.layout.activity_editar_gestor);
         dni = findViewById(R.id.dni);

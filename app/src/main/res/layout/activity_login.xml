@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:hint="Contraseña"
-            android:inputType="text"
+            android:inputType="textPassword"
             android:maxLength="180"
             android:maxLines="1"
             android:minEms="20"

@@ -4,14 +4,16 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firebasead.database.eventosDatabase.Gestor;
@@ -22,35 +24,29 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
 
-public class Login extends AppCompatActivity {
+public class FalseRecovery extends AppCompatActivity {
 
-    ImageView logo;
-    Button login;
-    EditText usuario, contraseña;
-    TextView crearCuenta, olvidar, alert;
+    EditText telefono, escribirSMS;
+    Button mandarSMS;
+    TextView alert;
+    ActivityResultLauncher<String> requestPermissionLauncherSMS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_recovery);
 
-        login = findViewById(R.id.log);
-        usuario = findViewById(R.id.user);
-        contraseña = findViewById(R.id.password);
-        usuario = findViewById(R.id.user);
-        crearCuenta = findViewById(R.id.createAccount);
-        olvidar = findViewById(R.id.forget);
-        logo = findViewById(R.id.logo);
+        telefono = findViewById(R.id.Phone);
+        escribirSMS = findViewById(R.id.escribirSMS);
+        mandarSMS = findViewById(R.id.SMS);
         alert = findViewById(R.id.alert);
 
-        //LOG IN
-        login.setOnClickListener(v -> {
-            String dni = usuario.getText().toString();
-            String pass = contraseña.getText().toString();
+        mandarSMS.setOnClickListener(v -> {
 
+            String tel = telefono.getText().toString();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             CollectionReference gestores = db.collection("Gestores");
-            Query gestor = gestores.whereEqualTo("DNI", dni).whereEqualTo("Contraseña", pass);
+            Query gestor = gestores.whereEqualTo("Num_Telf", tel);
 
             gestor.get().addOnCompleteListener(task -> {
                 String dni1 ="", contraseña="", nombre="", apellido="", telefono="";
@@ -83,32 +79,35 @@ public class Login extends AppCompatActivity {
 
                     } else {
 
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("Gestor", (Serializable) gestorObjeto);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                        finish();
+                        escribirSMS.setVisibility(View.VISIBLE);
 
+                        escribirSMS.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
+                                if(s.length()==6){
+
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("Gestor", (Serializable) gestorObjeto);
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                    finish();
+
+                                }
+                            }
+                        });
                     }
 
-                } else Log.w(TAG, "Error select gestor.", task.getException());
+                } else Log.w(TAG, "Error select telefono.", task.getException());
+
             });
-
-        });
-
-        // RECUPERA CONTRASEÑA
-        olvidar.setOnClickListener(v -> {
-            Intent intent = new Intent(Login.this, FalseRecovery.class);
-            startActivity(intent);
-        });
-
-        //CREAR CUENTA
-        crearCuenta.setOnClickListener(v -> {
-            Intent intent = new Intent(Login.this, NuevoGestor.class);
-            startActivity(intent);
-            finish();
         });
 
     }
+
 }

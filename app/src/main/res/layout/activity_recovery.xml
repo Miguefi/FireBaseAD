@@ -43,6 +43,17 @@
             android:inputType="phone"
             android:textAlignment="center" />
 
+        <TextView
+            android:id="@+id/alert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Número de teléfono no registrado"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            android:layout_marginTop="-10dp"/>
+
         <Button
             android:id="@+id/SMS"
             android:layout_width="match_parent"
