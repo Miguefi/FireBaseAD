@@ -48,19 +48,22 @@ public class Login extends AppCompatActivity {
             String dni = usuario.getText().toString();
             String pass = contraseña.getText().toString();
 
+            // INSTANCIACIÓN BBDD
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             CollectionReference gestores = db.collection("Gestores");
+
+            // SELECT
             Query gestor = gestores.whereEqualTo("DNI", dni).whereEqualTo("Contraseña", pass);
 
             gestor.get().addOnCompleteListener(task -> {
-                String dni1 ="", contraseña="", nombre="", apellido="", telefono="";
+                String s_dni ="", contraseña="", nombre="", apellido="", telefono="";
 
                 if (task.isSuccessful()) {
 
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Log.d(TAG, document.getId() + " => " + document.getData());
 
-                        dni1 = document.get("DNI").toString();
+                        s_dni = document.get("DNI").toString();
                         contraseña = document.get("Contraseña").toString();
                         nombre = document.get("Nombre").toString();
                         apellido = document.get("Apellido").toString();
@@ -68,7 +71,7 @@ public class Login extends AppCompatActivity {
 
                     }
 
-                    Gestor gestorObjeto = new Gestor(dni1, contraseña, nombre, apellido, telefono);
+                    Gestor gestorObjeto = new Gestor(s_dni, contraseña, nombre, apellido, telefono);
 
                     if (gestorObjeto.getDNI().equals("")){
 
@@ -94,6 +97,7 @@ public class Login extends AppCompatActivity {
 
                 } else Log.w(TAG, "Error select gestor.", task.getException());
             });
+
 
         });
 

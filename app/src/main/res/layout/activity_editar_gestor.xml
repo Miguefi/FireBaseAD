@@ -53,14 +53,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
         app:layout_constraintVertical_bias="0.0">
 
-        <ImageView
-            android:id="@+id/userPicture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="-30dp"
-            tools:srcCompat="@drawable/logoseradmin" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -152,6 +144,17 @@
             android:textColorHint="@color/hint_white"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/day_text_size" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="@dimen/ancho_cajas_texto"
+            android:layout_height="@dimen/alto_boton"
+            android:backgroundTint="@color/transparente"
+            android:text="Guardar cambios"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp" />
 
         <Button
             android:id="@+id/delete"

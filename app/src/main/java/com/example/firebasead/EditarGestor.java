@@ -12,24 +12,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firebasead.database.eventosDatabase.Gestor;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class EditarGestor extends AppCompatActivity {
 
     EditText dni, contraseña, nombre, apellido, telefono;
-    ImageView userPicture, listo;
+    ImageView listo;
     TextView alert;
-    Button delete;
+    Button delete, save;
     Gestor gestorObject = new Gestor();
 
     @Override
@@ -50,10 +48,10 @@ public class EditarGestor extends AppCompatActivity {
         nombre = findViewById(R.id.nombre);
         apellido = findViewById(R.id.apellido);
         telefono = findViewById(R.id.telefono);
-        userPicture = findViewById(R.id.userPicture);
         delete = findViewById(R.id.delete);
         alert = findViewById(R.id.alert);
         listo = findViewById(R.id.listo);
+        save = findViewById(R.id.save);
 
         dni.setText(gestorObject.getDNI());
         contraseña.setText(gestorObject.getContraseña());
@@ -72,7 +70,7 @@ public class EditarGestor extends AppCompatActivity {
             alert.setVisibility(View.INVISIBLE);
         });
 
-        listo.setOnClickListener(v -> {
+        save.setOnClickListener(v -> {
             String s_dni = dni.getText().toString();
             String nom = nombre.getText().toString();
             String ape = apellido.getText().toString();
@@ -84,6 +82,7 @@ public class EditarGestor extends AppCompatActivity {
 
             //SELECT DOCUMENTO / REGISTRO
             db.collection("Gestores").whereEqualTo("DNI", s_dni).limit(1).get().addOnCompleteListener(task -> {
+
                 if (task.isSuccessful()) {
                     DocumentReference docRef = null;
                     for (QueryDocumentSnapshot document : task.getResult()) {
@@ -95,25 +94,17 @@ public class EditarGestor extends AppCompatActivity {
                         ref.update("Apellido", ape);
                         ref.update("Contraseña", con);
                         ref.update("Num_Telf", tel);
-
                         docRef = ref;
-
                     }
 
                     Gestor gestorObjeto = new Gestor(s_dni, con, nom, ape, tel);
+                    setGestorObject(gestorObjeto);
 
-                    Map<String, Object> updates = new HashMap<>();
-                    updates.put("timestamp", FieldValue.serverTimestamp());
-
-                    // ESPERAR A UNA RESPUESTA DEL SERVIDOR, ACTUALIZACIONES COMPLETADAS
-                    assert docRef != null;
-                    docRef.update(updates).addOnCompleteListener(task1 -> {
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        Bundle bundle1 = new Bundle();
-                        bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
-                        intent.putExtras(bundle1);
-                        startActivity(intent);
-                    });
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
+                    intent.putExtras(bundle1);
+                    startActivity(intent);
 
                 } else {
                     Log.w(TAG, "Error select documento.", task.getException());
@@ -125,31 +116,62 @@ public class EditarGestor extends AppCompatActivity {
         });
 
         delete.setOnClickListener(v -> {
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("Gestores").whereEqualTo("DNI", dni.getText().toString()).limit(1).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentReference ref = null;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Log.d(TAG, document.getId() + " => " + document.getData());
 
-                        ref = document.getReference();
-                    }
+            new AlertDialog.Builder(EditarGestor.this)
+                    .setTitle("¿Estás seguro de que deseas eliminar tu cuenta?")
+                    .setMessage("Tu cuenta desaparecerá de la base de datos y no podrás recuperarla")
+                    .setIcon(R.drawable.ic_baseline_warning_24)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
 
-                    // DELETE
-                    assert ref != null;
-                    ref.delete().addOnSuccessListener(aVoid -> Log.d(TAG, "Docuemnto eliminado!"))
-                            .addOnFailureListener(e -> Log.w(TAG, "Error eliminando documento", e));
-                } else {
-                    Log.w(TAG, "Error select documento.", task.getException());
-                }
-            });
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Gestores").whereEqualTo("DNI", dni.getText().toString()).limit(1).get().addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                DocumentReference ref = null;
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
 
-            Intent intent = new Intent(getApplicationContext(), Login.class);
-            startActivity(intent);
-            finish();
+                                    ref = document.getReference();
+                                }
+
+                                // DELETE
+
+                                assert ref != null;
+                                ref.delete().addOnSuccessListener(aVoid -> Log.d(TAG, "Docuemnto eliminado!"))
+                                        .addOnFailureListener(e -> Log.w(TAG, "Error eliminando documento", e));
+
+                            } else {
+                                Log.w(TAG, "Error select documento.", task.getException());
+                            }
+                        });
+
+                        Intent intent = new Intent(getApplicationContext(), Login.class);
+                        startActivity(intent);
+                        finish();
+
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
 
         });
 
+        listo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                Bundle bundle1 = new Bundle();
+                bundle1.putSerializable("Gestor", (Serializable) getGestorObject());
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
+
+    private Gestor getGestorObject() {
+        return gestorObject;
+    }
+
+    private void setGestorObject(Gestor gestorObject) {
+        this.gestorObject = gestorObject;
+    }
+
 }

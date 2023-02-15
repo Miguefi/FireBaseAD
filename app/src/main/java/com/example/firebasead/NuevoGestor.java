@@ -39,14 +39,18 @@ public class NuevoGestor extends AppCompatActivity {
         crearGestor = findViewById(R.id.crear);
 
         crearGestor.setOnClickListener(v -> {
-            String s_dni = dni.getText().toString(), s_cont = contraseña.getText().toString(), s_nom = nombre.getText().toString(), s_ape = apellido.getText().toString(), s_num = num_tel.getText().toString();
+            String  s_dni = dni.getText().toString(),
+                    s_cont = contraseña.getText().toString(),
+                    s_nom = nombre.getText().toString(),
+                    s_ape = apellido.getText().toString(),
+                    s_num = num_tel.getText().toString();
 
             Map<String, Object> gestor = new HashMap<>();
             gestor.put("DNI", s_dni);
             gestor.put("Contraseña", s_cont);
             gestor.put("Nombre", s_nom);
             gestor.put("Apellido", s_ape);
-            gestor.put("Num_Tel", s_num);
+            gestor.put("Num_Telf", s_num);
 
             db.collection("Gestores").add(gestor).addOnSuccessListener(documentReference -> {
                         Log.d(TAG, "Insert gestor con ID: " + documentReference.getId());

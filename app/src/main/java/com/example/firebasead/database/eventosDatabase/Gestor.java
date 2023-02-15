@@ -18,9 +18,7 @@ public class Gestor implements Serializable {
         Num_Telf = num_telf;
     }
 
-    public Gestor() {
-
-    }
+    public Gestor() {}
 
     public String getApellido() {
         return Apellido;
@@ -74,3 +72,4 @@ public class Gestor implements Serializable {
     }
 
 }
+

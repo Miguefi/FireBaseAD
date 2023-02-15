@@ -52,7 +52,7 @@
             android:name=".NuevoArchivo"
             android:exported="false" />
         <!--
-  <activity
+        <activity
             android:name=".calendario.EventActivity"
             android:exported="false" >
         <meta-data
