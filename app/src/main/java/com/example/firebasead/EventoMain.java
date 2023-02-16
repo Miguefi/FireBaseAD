@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.SearchView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -19,15 +19,13 @@ import com.example.firebasead.database.eventosDatabase.Evento;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
-
-//import java.sql.Timestamp;
-import com.google.firebase.Timestamp;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,12 +40,15 @@ public class EventoMain extends AppCompatActivity {
     private ArrayList<Evento> eventos = new ArrayList<>();
     String pattern = "dd-MM-yy HH:mm";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
+    SearchView buscador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_eventos);
+
+        buscador.findViewById(R.id.buscador);
+        buscador.setBackgroundResource(R.drawable.ic_search);
 
         anyadirEvento = findViewById(R.id.añadir);
 

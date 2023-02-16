@@ -1,15 +1,15 @@
 package com.example.firebasead;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.firebasead.RecyclerArchivos.AdaptadorListado;
 import com.example.firebasead.RecyclerArchivos.Archivos;
@@ -37,6 +37,7 @@ public class NuevoArchivo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_archivo);
         buscador = findViewById(R.id.buscadorArchivo);
+        buscador.setBackgroundResource(R.drawable.ic_search);
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

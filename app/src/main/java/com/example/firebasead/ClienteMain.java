@@ -1,15 +1,17 @@
 package com.example.firebasead;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.firebasead.Recycler.AdaptadorListado;
 import com.example.firebasead.Recycler.Cliente;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -19,6 +21,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 
 public class ClienteMain extends AppCompatActivity implements SearchView.OnQueryTextListener {
@@ -39,6 +42,7 @@ public class ClienteMain extends AppCompatActivity implements SearchView.OnQuery
 
         // Inicialización de la SearchView y asignación del listener para detectar cambios en la búsqueda
         searchView = findViewById(R.id.buscador);
+        searchView.setBackgroundResource(R.drawable.ic_search);
         searchView.setOnQueryTextListener(this);
 
         // Inicialización de la lista de perfiles

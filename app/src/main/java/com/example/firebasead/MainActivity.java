@@ -1,7 +1,5 @@
 package com.example.firebasead;
 
-import static android.content.ContentValues.TAG;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +7,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firebasead.database.eventosDatabase.Gestor;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
 
@@ -39,20 +34,22 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             gestorObject = (Gestor) bundle.getSerializable("Gestor");
-            Log.d(TAG,  gestorObject.toString());
+            Log.d( "GESTOR MAIN",  gestorObject.toString());
+            setGestorObject(gestorObject);
         }
 
         gestor.setOnClickListener(v -> {
-            actualizarDatosGestor();
             Intent intent = new Intent(getApplicationContext(), EditarGestor.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             Bundle bundle1 = new Bundle();
-            bundle1.putSerializable("Gestor", (Serializable) gestorObject);
+            bundle1.putSerializable("Gestor", (Serializable) getGestorObject());
+            Log.d( "GESTOR MAIN - EDIT",  getGestorObject().toString());
             intent.putExtras(bundle1);
             startActivity(intent);
+            finish();
         });
 
         clientes.setOnClickListener(v -> {
-            actualizarDatosGestor();
             Intent intent = new Intent(getApplicationContext(), ClienteMain.class);
             Bundle bundle12 = new Bundle();
             bundle12.putSerializable("Gestor", (Serializable) gestorObject);
@@ -74,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         eventos.setOnClickListener(v -> {
-            actualizarDatosGestor();
-            Intent intent = new Intent(getApplicationContext(), EventoMain.class); //CAMBIAR ACTIVIDAD
+            Intent intent = new Intent(getApplicationContext(), EventoMain.class);
             Bundle bundle14 = new Bundle();
             bundle14.putSerializable("Gestor", (Serializable) gestorObject);
             intent.putExtras(bundle14);
@@ -84,44 +80,34 @@ public class MainActivity extends AppCompatActivity {
         });
 
         logOut.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), Login.class);
-            startActivity(intent);
-            finish();
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("¿Estás seguro de que deseas salir de su cuenta?")
+                    .setIcon(R.drawable.ic_baseline_logout_24)
+                    .setPositiveButton(android.R.string.yes, (dialog, whichButton) -> {
+
+                        Intent intent = new Intent(getApplicationContext(), Login.class);
+                        startActivity(intent);
+                        finish();
+
+                    })
+                    .setNegativeButton(android.R.string.no, null).show();
         });
     }
 
-    private void actualizarDatosGestor() {
-        Bundle bundle = this.getIntent().getExtras();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            gestorObject = (Gestor) bundle.getSerializable("Gestor");
+            gestorObject = (Gestor) getIntent().getSerializableExtra("Gestor");
+            Log.d( "MAIN RESUME",  gestorObject.toString());
+            setGestorObject(gestorObject);
         }
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference gestores = db.collection("Gestores");
-
-        // VERIFICAR DNI GESTOR
-        Query gestor = gestores.whereEqualTo("DNI", gestorObject.getDNI());
-
-        gestor.get().addOnCompleteListener(task -> {
-            String dni="", contraseña="", nombre="", apellido="", telefono="";
-
-            if (task.isSuccessful()) {
-
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Log.d(TAG, document.getId() + " => " + document.getData());
-                    dni = document.get("DNI").toString();
-                    contraseña = document.get("Contraseña").toString();
-                    nombre = document.get("Nombre").toString();
-                    apellido = document.get("Apellido").toString();
-                    telefono = document.get("Num_Telf").toString();
-                }
-
-                Gestor gestorObjeto = new Gestor(dni, contraseña, nombre, apellido, telefono);
-                setGestorObject(gestorObjeto); // ACTUALIZA gestorObjeto
-
-            } else Log.w(TAG, "Error select gestor.", task.getException());
-        });
     }
+
 
     private void setGestorObject(Gestor gestorObject) { this.gestorObject = gestorObject; }
+
+    private Gestor getGestorObject() { return gestorObject; }
 
 }

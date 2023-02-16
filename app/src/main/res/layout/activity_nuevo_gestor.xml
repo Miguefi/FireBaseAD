@@ -39,7 +39,7 @@
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="DNI"
+            android:hint="DNI/NIE"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -49,6 +49,15 @@
             android:textColor="@color/white"
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
+        <TextView
+            android:id="@+id/alert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Número de identificación no válido"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"/>
 
         <EditText
             android:id="@+id/contraseña"
@@ -65,6 +74,15 @@
             android:textColor="@color/white"
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
+        <TextView
+            android:id="@+id/alertC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"/>
 
         <EditText
             android:id="@+id/nombre"
@@ -81,6 +99,15 @@
             android:textColor="@color/white"
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
+        <TextView
+            android:id="@+id/alertN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"/>
 
         <EditText
             android:id="@+id/apellido"
@@ -97,13 +124,22 @@
             android:textColor="@color/white"
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
+        <TextView
+            android:id="@+id/alertA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"/>
 
         <EditText
             android:id="@+id/telefono"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Teléfono"
+            android:hint="Teléfono Móvil"
             android:inputType="text"
             android:maxLength="180"
             android:maxLines="1"
@@ -113,6 +149,15 @@
             android:textColor="@color/white"
             android:textColorHint="@color/hint_white"
             android:backgroundTint="@color/white" />
+        <TextView
+            android:id="@+id/alert2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Número de teléfono móvil no válido"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"/>
 
         <Button
             android:id="@+id/crear"
@@ -124,6 +169,26 @@
             android:textStyle="bold"
             app:strokeColor="@color/white"
             app:strokeWidth="2.5dp" />
+        <TextView
+            android:id="@+id/alertVerifyDNI"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Ya existe una cuenta con ese DNI/NIE"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-28dp"/>
+        <TextView
+            android:id="@+id/alertVerifyTel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Número móvil ya registrado"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-25dp"/>
 
     </LinearLayout>
 

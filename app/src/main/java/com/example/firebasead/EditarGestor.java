@@ -16,19 +16,22 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.firebasead.database.eventosDatabase.Gestor;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 public class EditarGestor extends AppCompatActivity {
 
-    EditText dni, contraseña, nombre, apellido, telefono;
+    EditText dni, contrasena, nombre, apellido, telefono;
     ImageView listo;
-    TextView alert;
+    TextView alert, alertVerifyTel, alertTel, alertCon, alertNom, alertApe;
     Button delete, save;
-    Gestor gestorObject = new Gestor();
+    Gestor gestorObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,14 +40,13 @@ public class EditarGestor extends AppCompatActivity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             gestorObject = (Gestor) bundle.getSerializable("Gestor");
+            Log.d( "GESTOR EDIT",  gestorObject.toString());
+            setGestorObject(gestorObject);
         }
-//        else { // SI BUNDLE ES NULO, NO ESTA LOGEADO
-//            finish();
-//        }
 
         setContentView(R.layout.activity_editar_gestor);
         dni = findViewById(R.id.dni);
-        contraseña = findViewById(R.id.contraseña);
+        contrasena = findViewById(R.id.contrasena);
         nombre = findViewById(R.id.nombre);
         apellido = findViewById(R.id.apellido);
         telefono = findViewById(R.id.telefono);
@@ -52,12 +54,18 @@ public class EditarGestor extends AppCompatActivity {
         alert = findViewById(R.id.alert);
         listo = findViewById(R.id.listo);
         save = findViewById(R.id.save);
+        alertTel = findViewById(R.id.alert2);
+        alertCon = findViewById(R.id.alertC);
+        alertNom = findViewById(R.id.alertN);
+        alertApe = findViewById(R.id.alertA);
+        alertVerifyTel = findViewById(R.id.alertVerifyTel);
 
         dni.setText(gestorObject.getDNI());
-        contraseña.setText(gestorObject.getContraseña());
+        contrasena.setText(gestorObject.getContraseña());
         nombre.setText(gestorObject.getNombre());
         apellido.setText(gestorObject.getApellido());
         telefono.setText(gestorObject.getNum_Telf());
+        String tel_respaldo = telefono.getText().toString();
 
         dni.setOnClickListener(v -> {
             AlphaAnimation animation = new AlphaAnimation(0, 1);
@@ -74,44 +82,137 @@ public class EditarGestor extends AppCompatActivity {
             String s_dni = dni.getText().toString();
             String nom = nombre.getText().toString();
             String ape = apellido.getText().toString();
-            String con = contraseña.getText().toString();
+            String con = contrasena.getText().toString();
             String tel = telefono.getText().toString();
 
             //INSTANCIA BBDD
             FirebaseFirestore db = FirebaseFirestore.getInstance();
+            CollectionReference gestores = db.collection("Gestores");
 
-            //SELECT DOCUMENTO / REGISTRO
-            db.collection("Gestores").whereEqualTo("DNI", s_dni).limit(1).get().addOnCompleteListener(task -> {
-
-                if (task.isSuccessful()) {
-                    DocumentReference docRef = null;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
+            //VERIFICAR TEL
+            Query gestorVerifyTel = gestores.whereEqualTo("Num_Telf", tel);
+            gestorVerifyTel.get().addOnCompleteListener(taskTel -> {
+                String lv_num = "";
+                if (taskTel.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : taskTel.getResult()) {
                         Log.d(TAG, document.getId() + " => " + document.getData());
-
-                        // UPDATE
-                        DocumentReference ref = document.getReference();
-                        ref.update("Nombre", nom);
-                        ref.update("Apellido", ape);
-                        ref.update("Contraseña", con);
-                        ref.update("Num_Telf", tel);
-                        docRef = ref;
+                        lv_num = document.get("Num_Telf").toString();
                     }
 
-                    Gestor gestorObjeto = new Gestor(s_dni, con, nom, ape, tel);
-                    setGestorObject(gestorObjeto);
+                    if (lv_num.equals("") || tel_respaldo.equals(lv_num)) {
 
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    Bundle bundle1 = new Bundle();
-                    bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
-                    intent.putExtras(bundle1);
-                    startActivity(intent);
+                        //VERIFICAR OTROS CAMPOS
+                        Pattern telPattern = Pattern.compile("^[76]{1}[0-9]{8}$");
+                        Pattern loQueSeaPattern = Pattern.compile("^(?!\\s*$).+");
 
-                } else {
-                    Log.w(TAG, "Error select documento.", task.getException());
-                }
+                        if (telPattern.matcher(tel).matches() && loQueSeaPattern.matcher(con).matches() && loQueSeaPattern.matcher(nom).matches() && loQueSeaPattern.matcher(ape).matches()) {
+
+                            //SELECT DOCUMENTO / REGISTRO
+                            gestores.whereEqualTo("DNI", s_dni).limit(1).get().addOnCompleteListener(task -> {
+
+                                if (task.isSuccessful()) {
+                                    DocumentReference docRef = null;
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                        // UPDATE
+                                        DocumentReference ref = document.getReference();
+                                        ref.update("Nombre", nom);
+                                        ref.update("Apellido", ape);
+                                        ref.update("Contraseña", con);
+                                        ref.update("Num_Telf", tel);
+                                        docRef = ref;
+                                    }
+
+                                    Gestor gestorObjeto = new Gestor(s_dni, con, nom, ape, tel);
+                                    Log.d("GESTOR EDIT ACTUALIZADO", gestorObjeto.toString());
+                                    setGestorObject(gestorObjeto);
+
+                                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                    Bundle bundle1 = new Bundle();
+                                    bundle1.putSerializable("Gestor", (Serializable) gestorObjeto);
+                                    Log.d("GESTOR EDIT ACTUALIZADO", getGestorObject().toString());
+                                    intent.putExtras(bundle1);
+                                    startActivity(intent);
+
+                                } else {
+                                    Log.w(TAG, "Error select documento.", task.getException());
+                                }
+                            });
+
+                            finish();
+
+                        } else {
+
+                            if (!telPattern.matcher(tel).matches()) {
+
+                                AlphaAnimation animation = new AlphaAnimation(0, 1);
+                                animation.setDuration(4000);
+                                alertTel.startAnimation(animation);
+                                alertTel.setVisibility(View.VISIBLE);
+                                AlphaAnimation animation2 = new AlphaAnimation(1, 0);
+                                animation2.setDuration(4000);
+                                alertTel.startAnimation(animation2);
+                                alertTel.setVisibility(View.INVISIBLE);
+
+                            }
+
+                            if (!loQueSeaPattern.matcher(con).matches()) {
+
+                                AlphaAnimation animation = new AlphaAnimation(0, 1);
+                                animation.setDuration(4000);
+                                alertCon.startAnimation(animation);
+                                alertCon.setVisibility(View.VISIBLE);
+                                AlphaAnimation animation2 = new AlphaAnimation(1, 0);
+                                animation2.setDuration(4000);
+                                alertCon.startAnimation(animation2);
+                                alertCon.setVisibility(View.INVISIBLE);
+
+                            }
+
+                            if (!loQueSeaPattern.matcher(nom).matches()) {
+
+                                AlphaAnimation animation = new AlphaAnimation(0, 1);
+                                animation.setDuration(4000);
+                                alertNom.startAnimation(animation);
+                                alertNom.setVisibility(View.VISIBLE);
+                                AlphaAnimation animation2 = new AlphaAnimation(1, 0);
+                                animation2.setDuration(4000);
+                                alertNom.startAnimation(animation2);
+                                alertNom.setVisibility(View.INVISIBLE);
+
+                            }
+
+                            if (!loQueSeaPattern.matcher(ape).matches()) {
+
+                                AlphaAnimation animation = new AlphaAnimation(0, 1);
+                                animation.setDuration(4000);
+                                alertApe.startAnimation(animation);
+                                alertApe.setVisibility(View.VISIBLE);
+                                AlphaAnimation animation2 = new AlphaAnimation(1, 0);
+                                animation2.setDuration(4000);
+                                alertApe.startAnimation(animation2);
+                                alertApe.setVisibility(View.INVISIBLE);
+
+                            }
+                        }
+
+                    } else {
+
+                        AlphaAnimation animation = new AlphaAnimation(0, 1);
+                        animation.setDuration(4000);
+                        alertVerifyTel.startAnimation(animation);
+                        alertVerifyTel.setVisibility(View.VISIBLE);
+                        AlphaAnimation animation2 = new AlphaAnimation(1, 0);
+                        animation2.setDuration(4000);
+                        alertVerifyTel.startAnimation(animation2);
+                        alertVerifyTel.setVisibility(View.INVISIBLE);
+
+                    }
+
+                } else Log.w(TAG, "Error select gestor.", taskTel.getException());
+
             });
-
-            finish();
 
         });
 
@@ -134,7 +235,6 @@ public class EditarGestor extends AppCompatActivity {
                                 }
 
                                 // DELETE
-
                                 assert ref != null;
                                 ref.delete().addOnSuccessListener(aVoid -> Log.d(TAG, "Docuemnto eliminado!"))
                                         .addOnFailureListener(e -> Log.w(TAG, "Error eliminando documento", e));
@@ -159,6 +259,8 @@ public class EditarGestor extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 Bundle bundle1 = new Bundle();
                 bundle1.putSerializable("Gestor", (Serializable) getGestorObject());
+                Log.d( "GESTOR EDIT LISTO",  getGestorObject().toString());
+                intent.putExtras(bundle1);
                 startActivity(intent);
                 finish();
             }

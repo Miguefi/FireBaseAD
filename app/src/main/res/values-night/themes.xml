@@ -1,6 +1,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.FireBaseAD" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowBackground">@drawable/gradient</item>
+        <item name="background">@drawable/gradient</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/cobalt_blue</item>
         <item name="colorPrimaryVariant">@color/early_black</item>

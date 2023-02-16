@@ -64,6 +64,7 @@
                 android:backgroundTint="@color/white"
                 android:hint="DNI"
                 android:inputType="none"
+                android:editable="false"
                 android:textColor="@color/md_grey"
                 android:textColorHint="@color/hint_white"
                 android:textCursorDrawable="@null"
@@ -85,7 +86,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <EditText
-            android:id="@+id/contraseña"
+            android:id="@+id/contrasena"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-20dp"
@@ -99,6 +100,17 @@
             android:textColorHint="@color/hint_white"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/day_text_size" />
+        <TextView
+            android:id="@+id/alertC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="-20dp"/>
+
 
         <EditText
             android:id="@+id/nombre"
@@ -114,6 +126,17 @@
             android:textColorHint="@color/hint_white"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/day_text_size" />
+        <TextView
+            android:id="@+id/alertN"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/nombre"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="-20dp"/>
+
 
         <EditText
             android:id="@+id/apellido"
@@ -129,6 +152,17 @@
             android:textColorHint="@color/hint_white"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/day_text_size" />
+        <TextView
+            android:id="@+id/alertA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="* Obligatorio"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="-20dp"/>
+
 
         <EditText
             android:id="@+id/telefono"
@@ -144,6 +178,17 @@
             android:textColorHint="@color/hint_white"
             android:textCursorDrawable="@null"
             android:textSize="@dimen/day_text_size" />
+        <TextView
+            android:id="@+id/alert2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Número de teléfono móvil no válido"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/dni"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="-20dp"/>
+
 
         <Button
             android:id="@+id/save"
@@ -155,6 +200,17 @@
             android:textSize="16sp"
             app:strokeColor="@color/white"
             app:strokeWidth="1dp" />
+        <TextView
+            android:id="@+id/alertVerifyTel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Teléfono ya registrado"
+            android:textColor="@color/carrot_orange"
+            android:visibility="invisible"
+            app:layout_constraintTop_toBottomOf="@+id/telefono"
+            android:layout_marginTop="-30dp"
+            android:layout_marginBottom="-20dp"/>
+
 
         <Button
             android:id="@+id/delete"
