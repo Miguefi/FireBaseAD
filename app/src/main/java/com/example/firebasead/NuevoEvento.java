@@ -5,6 +5,7 @@ import static androidx.constraintlayout.widget.ConstraintLayoutStates.TAG;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -17,11 +18,13 @@ import android.widget.ImageView;
 import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.firebasead.database.eventosDatabase.Evento;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.Serializable;
@@ -73,16 +76,32 @@ public class NuevoEvento extends AppCompatActivity {
 
                Map<String, Object> evento = prepararEvento();
 
-               db.collection("Eventos").add(evento).addOnSuccessListener(documentReference -> {
-                           Log.d(TAG, "Insertado evento con ID: " + documentReference.getId());
+               if (evento != null) {
 
-                       })
-                       .addOnFailureListener(e -> Log.w(TAG, "Error insertando evento", e));
+                   db.collection("Eventos").add(evento).addOnSuccessListener(documentReference -> {
+                               Log.d(TAG, "Insertado evento con ID: " + documentReference.getId());
 
-               Intent intent = new Intent(NuevoEvento.this, EventoMain.class);
-               setResult(CLAVE_INSERTADO , intent);
-               NuevoEvento.super.onBackPressed();
-               finish();
+                           })
+                           .addOnFailureListener(e -> Log.w(TAG, "Error insertando evento", e));
+
+                   Intent intent = new Intent(NuevoEvento.this, EventoMain.class);
+                   setResult(CLAVE_INSERTADO, intent);
+                   NuevoEvento.super.onBackPressed();
+                   finish();
+
+               } else {
+
+                   new AlertDialog.Builder(NuevoEvento.this)
+                           .setTitle("Faltan datos")
+                           .setMessage("Tienes que rellenar todos los campos")
+                           .setIcon(android.R.drawable.ic_dialog_dialer)
+                           .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                               public void onClick(DialogInterface dialog, int whichButton) {
+
+                               }}
+                           ).show();
+
+               }
 
            }
 
@@ -177,29 +196,38 @@ public class NuevoEvento extends AppCompatActivity {
         String stringDateFin = fechaFin.getText().toString() + " " + horaFin.getText().toString();
         Date dateInicio = null;
         Date dateFin = null;
-
-        try {
-            dateInicio = simpleDateFormat.parse(stringDateInicio);
-            dateFin = simpleDateFormat.parse(stringDateFin);
-        } catch (ParseException e) {
-            Log.d(TAG, e.toString());
-        }
-
-        Timestamp timeStampInicio = new Timestamp(dateInicio);
-        Timestamp timeStampFin = new Timestamp(dateFin);
-        Float s_latitud = Float.valueOf(latitud.getText().toString());
-        Float s_longitud = Float.valueOf(longitud.getText().toString());
-
         Map<String, Object> evento = new HashMap<>();
 
-        evento.put("Titulo", s_titulo);
-        evento.put("Inicio", timeStampInicio);
-        evento.put("Fin", timeStampFin);
-        evento.put("Latitud", s_latitud);
-        evento.put("Longitud", s_longitud);
-        evento.put("Descripcion", s_descripcion);
+        if (s_titulo.isEmpty() || stringDateInicio.isEmpty() || stringDateFin.isEmpty() || latitud.getText().toString().isEmpty()
+                || longitud.getText().toString().isEmpty() || s_descripcion.isEmpty()) {
 
-        return evento;
+            Log.d(TAG, "Tienes que rellenar todos los campos");
+
+        } else {
+
+            try {
+                dateInicio = simpleDateFormat.parse(stringDateInicio);
+                dateFin = simpleDateFormat.parse(stringDateFin);
+            } catch (ParseException e) {
+                Log.d(TAG, e.toString());
+            }
+
+            Timestamp timeStampInicio = new Timestamp(dateInicio);
+            Timestamp timeStampFin = new Timestamp(dateFin);
+            Float s_latitud = Float.valueOf(latitud.getText().toString());
+            Float s_longitud = Float.valueOf(longitud.getText().toString());
+
+            evento.put("Titulo", s_titulo);
+            evento.put("Inicio", timeStampInicio);
+            evento.put("Fin", timeStampFin);
+            evento.put("Latitud", s_latitud);
+            evento.put("Longitud", s_longitud);
+            evento.put("Descripcion", s_descripcion);
+            return evento;
+
+        }
+
+        return null;
 
     }
 }
