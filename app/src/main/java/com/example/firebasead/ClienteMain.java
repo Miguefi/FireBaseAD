@@ -41,8 +41,8 @@ public class ClienteMain extends AppCompatActivity implements SearchView.OnQuery
         setContentView(R.layout.activity_cliente_main);
 
         // Inicialización de la SearchView y asignación del listener para detectar cambios en la búsqueda
-        searchView = findViewById(R.id.buscador);
-        searchView.setBackgroundResource(R.drawable.ic_search);
+       searchView = findViewById(R.id.buscador);
+//        searchView.setBackgroundResource(R.drawable.ic_search);
         searchView.setOnQueryTextListener(this);
 
         // Inicialización de la lista de perfiles

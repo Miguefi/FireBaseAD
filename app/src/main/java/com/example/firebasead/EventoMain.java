@@ -47,8 +47,8 @@ public class EventoMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recycler_eventos);
 
-        buscador.findViewById(R.id.buscador);
-        buscador.setBackgroundResource(R.drawable.ic_search);
+        buscador = findViewById(R.id.buscador);
+//        buscador.setBackgroundResource(R.drawable.ic_search);
 
         anyadirEvento = findViewById(R.id.añadir);
 

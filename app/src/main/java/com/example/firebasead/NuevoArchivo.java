@@ -37,7 +37,7 @@ public class NuevoArchivo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevo_archivo);
         buscador = findViewById(R.id.buscadorArchivo);
-        buscador.setBackgroundResource(R.drawable.ic_search);
+//        buscador.setBackgroundResource(R.drawable.ic_search);
         buscador.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
